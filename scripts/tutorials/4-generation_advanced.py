@@ -59,9 +59,9 @@ generation_classes = '../../data/labels_classes_priors/generation_classes_contra
 # mean of Gaussian for labels 4 and 43 drawn from N(40,15)
 # mean of Gaussian for labels 25 and 57 drawn from N(70,30)
 # These hyperparameters were estimated with the function SynthSR/estimate_priors.py/build_intensity_stats()
-prior_means = '../../data/labels_classes_priors/prior_means_t1.npy'
+prior_means = '../../data/labels_classes_priors/prior_means.npy'
 # same as for prior_means, but for the standard deviations of the GMM.
-prior_stds = '../../data/labels_classes_priors/prior_stds_t1.npy'
+prior_stds = '../../data/labels_classes_priors/prior_stds.npy'
 
 # ---------- Resolution parameters ----------
 
