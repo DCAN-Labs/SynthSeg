@@ -14,3 +14,4 @@ SynthSeg/boxplots.py
 SynthSeg/check_*
 SynthSeg/training_*
 SynthSeg/predict_*
+/scripts/tutorials/generated_examples/

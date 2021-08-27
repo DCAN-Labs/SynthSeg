@@ -21,7 +21,7 @@ result_dir = './generated_examples'  # folder where examples will be saved
 path_label_map = '../../data/training_label_maps'
 
 # Here we specify the structures in the label maps for which we want to generate intensities.
-# This is given as a list of label values, which do not necesseraly need to be present in every label map.
+# This is given as a list of label values, which do not necessarily need to be present in every label map.
 # However, these labels must follow a specific order: first the non-sided labels, then all the left labels, and finally
 # the corresponding right labels in the same order as the left ones.
 #
