@@ -2,7 +2,7 @@ from SynthSeg.estimate_priors import build_intensity_stats
 import sys
 
 
-def main(image_dir, labels_dir, estimation_labels, result_dir):
+def estimate_intensities(image_dir, labels_dir, estimation_labels, result_dir):
     """Estimate the hyperparameters governing the GMM prior distributions.  Simple uni-modal case.
 
     Keyword arguments:
@@ -18,4 +18,4 @@ def main(image_dir, labels_dir, estimation_labels, result_dir):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    estimate_intensities(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
