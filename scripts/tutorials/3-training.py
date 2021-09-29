@@ -37,8 +37,8 @@ steps_per_epoch = 5000  # number of iteration per epoch
 # labels and classes lists
 # Please note that here we do not provide the number of non-sided labels.
 # This is because the training function will do it, based on the FreeSurfer classification of labels.
-path_generation_labels = '../../data/labels_classes_priors/generation_labels.npy'
-path_segmentation_labels = '../../data/labels_classes_priors/segmentation_labels.npy'
+path_generation_labels = '../../data/labels_classes_priors/original/generation_labels.npy'
+path_segmentation_labels = '../../data/labels_classes_priors/original/segmentation_labels.npy'
 
 # shape and resolution of the outputs
 target_res = None
@@ -47,7 +47,7 @@ n_channels = 1
 
 # GMM sampling
 prior_distributions = 'uniform'
-path_generation_classes = '../../data/labels_classes_priors/generation_classes.npy'
+path_generation_classes = '../../data/labels_classes_priors/original/generation_classes.npy'
 
 # spatial deformation paramaters
 flipping = True
