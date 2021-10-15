@@ -36,3 +36,12 @@ SynthSeg/predict_*
 /SynthSeg/dcan/data/training_label_maps/original/labels_t1_3.nii.gz
 /SynthSeg/dcan/data/training_label_maps/original/labels_t1_4.nii.gz
 /SynthSeg/dcan/data/training_label_maps/dcan/
+/data/my_README_figures/SynthSeg_generated_bias_field.nii.gz
+/data/my_README_figures/SynthSeg_generated_bias_field_0000.nii.gz
+/data/my_README_figures/SynthSeg_generated_bias_field_0001.nii.gz
+/data/my_README_figures/SynthSeg_generated_downsampling.nii.gz
+/data/my_README_figures/SynthSeg_generated_downsampling_0000.nii.gz
+/data/my_README_figures/SynthSeg_generated_downsampling_0001.nii.gz
+/data/my_README_figures/SynthSeg_generated_gmm_sampling.nii.gz
+/data/my_README_figures/SynthSeg_generated_gmm_sampling_0000.nii.gz
+/data/my_README_figures/SynthSeg_generated_gmm_sampling_0001.nii.gz
