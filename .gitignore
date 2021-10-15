@@ -35,3 +35,4 @@ SynthSeg/predict_*
 /SynthSeg/dcan/data/training_label_maps/original/labels_t1_2.nii.gz
 /SynthSeg/dcan/data/training_label_maps/original/labels_t1_3.nii.gz
 /SynthSeg/dcan/data/training_label_maps/original/labels_t1_4.nii.gz
+/SynthSeg/dcan/data/training_label_maps/dcan/

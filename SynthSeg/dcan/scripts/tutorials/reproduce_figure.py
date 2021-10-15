@@ -24,11 +24,11 @@ assert path.exists(result_dir)
 
 
 # path training label maps
-path_label_map = '../../data/training_label_maps/original'
+path_label_map = '../../../../data/training_label_maps/original'
 assert path.exists(path_label_map)
-generation_labels = '../../data/labels_classes_priors/original/generation_labels.npy'
+generation_labels = '../../../../data/labels_classes_priors/original/generation_labels.npy'
 assert path.exists(generation_labels)
-output_labels = '../../data/labels_classes_priors/original/segmentation_labels.npy'
+output_labels = '../../../../data/labels_classes_priors/original/segmentation_labels.npy'
 assert path.exists(output_labels)
 n_neutral_labels = 18
 output_shape = 160
@@ -43,7 +43,7 @@ prior_distributions = 'normal'
 # Example: (continuing the example of tutorial 1)  generation_labels = [0, 24, 507, 2, 3, 4, 17, 25, 41, 42, 43, 53, 57]
 #                                                 generation_classes = [0,  1,   2, 3, 4, 5,  4,  6,  3,  4,  5,  4,  6]
 # Note that structures with right/left labels are now associated with the same class.
-generation_classes = '../../data/labels_classes_priors/original/generation_classes_contrast_specific.npy'
+generation_classes = '../../../../data/labels_classes_priors/original/generation_classes_contrast_specific.npy'
 assert path.exists(generation_classes)
 
 # We specify here the hyperparameters governing the prior distribution of the GMM.
@@ -65,10 +65,10 @@ assert path.exists(generation_classes)
 # mean of Gaussian for labels 4 and 43 drawn from N(40,15)
 # mean of Gaussian for labels 25 and 57 drawn from N(70,30)
 # These hyperparameters were estimated with the function SynthSR/estimate_priors.py/build_intensity_stats()
-prior_means = '../../data/labels_classes_priors/original/prior_means_t1.npy'
+prior_means = '../../../../data/labels_classes_priors/original/prior_means_t1.npy'
 assert path.exists(prior_means)
 # same as for prior_means, but for the standard deviations of the GMM.
-prior_stds = '../../data/labels_classes_priors/original/prior_stds_t1.npy'
+prior_stds = '../../../../data/labels_classes_priors/original/prior_stds_t1.npy'
 assert path.exists(prior_stds)
 
 # ---------- Resolution parameters ----------
