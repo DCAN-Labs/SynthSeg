@@ -1,5 +1,4 @@
 import os
-import sys
 
 import numpy as np
 
@@ -200,7 +199,115 @@ def create_deformed_labels(labels_dir, result_dir):
                       os.path.join(result_dir, '%s.nii.gz' % output_file_name))
 
 
+def create_gmm_sampling_image(labels_dir, result_dir, prior_means, prior_stds):
+    generation_classes = np.array(
+        [0,  # background
+         1,  # CSF
+         2,  # 3rd-Ventricle
+         3,  # 4th-Ventricle
+         4,  # Brain-Stem
+         5,  # WM-hypointensities
+         6,  # Optic-Chiasm
+         7,  # Vermis
+         8,  # Left-Cerebral-Exterior
+         9,  # Left-Cerebral-White-Matter
+         10,  # Left-Cerebral-Cortex
+         11,  # Left-Lateral-Ventricle
+         12,  # Left-Inf-Lat-Vent
+         13,  # Left-Cerebellum-Exterior
+         14,  # Left-Cerebellum-White-Matter
+         15,  # Left-Cerebellum-Cortex
+         16,  # Left-Thalamus-Proper
+         17,  # Left-Caudate
+         18,  # Left-Putamen
+         19,  # Left-Pallidum
+         20,  # Left-Hippocampus
+         21,  # Left-Amygdala
+         22,  # Left-Accumbens-area
+         23,  # Left-VentralDC
+         24,  # Left-vessel
+         25,  # Left-choroid-plexus
+         8,  # Right-Cerebral-Exterior
+         9,  # Right-Cerebral-White-Matter
+         10,  # Right-Cerebral-Cortex
+         11,  # Right-Lateral-Ventricle
+         12,  # Right-Inf-Lat-Vent
+         13,  # Right-Cerebellum-Exterior
+         14,  # Right-Cerebellum-White-Matter
+         15,  # Right-Cerebellum-Cortex
+         16,  # Right-Thalamus-Proper
+         17,  # Right-Caudate
+         18,  # Right-Putamen
+         19,  # Right-Pallidum
+         20,  # right hippocampus
+         21,  # Right-Amygdala
+         22,  # Right-Accumbens-area
+         23,  # Right-VentralDC
+         24,  # Right-vessel
+         25])  # Right-choroid-plexus
+    generation_labels = np.array(
+        [0,  # background
+         24,  # CSF
+         14,  # 3rd-Ventricle
+         15,  # 4th-Ventricle
+         16,  # Brain-Stem
+         77,  # WM-hypointensities
+         85,  # Optic-Chiasm
+         172,  # Vermis
+         1,  # Left-Cerebral-Exterior
+         2,  # Left-Cerebral-White-Matter
+         3,  # Left-Cerebral-Cortex
+         4,  # Left-Lateral-Ventricle
+         5,  # Left-Inf-Lat-Vent
+         6,  # Left-Cerebellum-Exterior
+         7,  # Left-Cerebellum-White-Matter
+         8,  # Left-Cerebellum-Cortex
+         10,  # Left-Thalamus-Proper
+         11,  # Left-Caudate
+         12,  # Left-Putamen
+         13,  # Left-Pallidum
+         17,  # Left-Hippocampus
+         18,  # Left-Amygdala
+         26,  # Left-Accumbens-area
+         28,  # Left-VentralDC
+         30,  # Left-vessel
+         31,  # Left-choroid-plexus
+         40,  # Right-Cerebral-Exterior
+         41,  # Right-Cerebral-White-Matter
+         42,  # Right-Cerebral-Cortex
+         43,  # Right-Lateral-Ventricle
+         44,  # Right-Inf-Lat-Vent
+         45,  # Right-Cerebellum-Exterior
+         46,  # Right-Cerebellum-White-Matter
+         47,  # Right-Cerebellum-Cortex
+         49,  # Right-Thalamus-Proper
+         50,  # Right-Caudate
+         51,  # Right-Putamen
+         52,  # Right-Pallidum
+         53,  # right hippocampus
+         54,  # Right-Amygdala
+         58,  # Right-Accumbens-area
+         60,  # Right-VentralDC
+         62,  # Right-vessel
+         63])  # Right-choroid-plexus
+    brain_generator = \
+        BrainGenerator(
+            labels_dir, # generation_labels=generation_labels, generation_classes=generation_classes,
+            prior_means=prior_means, prior_stds=prior_stds, flipping=False, scaling_bounds=False, rotation_bounds=False,
+            shearing_bounds=False)
+    t1_im, _ = brain_generator.generate_brain()
+    output_file_name = 'gmm_sampling_1'
+    utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
+                      os.path.join(result_dir, '%s_%s.nii.gz' % (output_file_name, '0000')))
+
+
 if __name__ == "__main__":
     labels_dir_1 = '/home/miran045/reine097/projects/SynthSeg/data/dcan/figure3/example1/input'
     results_dir_1 = '/home/miran045/reine097/projects/SynthSeg/data/dcan/figure3/example1/output'
     create_deformed_labels(labels_dir_1, results_dir_1)
+    priors_folder = '/home/feczk001/shared/data/nnUNet/intensity_estimation/Task511/priors/'
+    t1_prior_means_file = os.path.join(priors_folder, 't1', 'prior_means.npy')
+    t1_prior_means = np.load(t1_prior_means_file)
+    t1_prior_stds_file = os.path.join(priors_folder, 't1', 'prior_stds.npy')
+    t1_prior_stds = np.load(t1_prior_stds_file)
+    create_gmm_sampling_image(results_dir_1, results_dir_1, t1_prior_means, t1_prior_stds)
