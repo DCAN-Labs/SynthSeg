@@ -144,21 +144,6 @@ def generate_overview_diagram(path_label_map, priors_folder, result_dir):
 
     ########################################################################################################
 
-    # instantiate BrainGenerator object
-    brain_generator_gmm_sampling = BrainGenerator(labels_dir=path_label_map,
-                                                  generation_labels=generation_labels,
-                                                  output_labels=output_labels,
-                                                  generation_classes=generation_classes,
-                                                  prior_distributions=prior_distribution,
-                                                  prior_means=prior_means,
-                                                  prior_stds=prior_stds,
-                                                  output_shape=output_shape,
-                                                  n_channels=2,
-                                                  use_specific_stats_for_channel=True,
-                                                  blur_range=None,
-                                                  bias_field_std=0.0,
-                                                  bias_shape_factor=0.0)
-
     # create result dir
     utils.mkdir(result_dir)
 
@@ -207,5 +192,15 @@ def create_image_files(generation_classes, generation_labels, output_labels, out
                       os.path.join(result_dir, '%s.nii.gz' % output_file_name))
 
 
+def create_deformed_labels(labels_dir, result_dir):
+    brain_generator = BrainGenerator(labels_dir)
+    _, lab = brain_generator.generate_brain()
+    output_file_name = 'deformed_labels_1'
+    utils.save_volume(lab, brain_generator.aff, brain_generator.header,
+                      os.path.join(result_dir, '%s.nii.gz' % output_file_name))
+
+
 if __name__ == "__main__":
-    generate_overview_diagram(sys.argv[1], sys.argv[2], sys.argv[3])
+    labels_dir_1 = '/home/miran045/reine097/projects/SynthSeg/data/dcan/figure3/example1/input'
+    results_dir_1 = '/home/miran045/reine097/projects/SynthSeg/data/dcan/figure3/example1/output'
+    create_deformed_labels(labels_dir_1, results_dir_1)
