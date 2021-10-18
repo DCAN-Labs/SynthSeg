@@ -292,7 +292,7 @@ def create_gmm_sampling_image(labels_dir, result_dir, prior_means, prior_stds):
          63])  # Right-choroid-plexus
     brain_generator = \
         BrainGenerator(
-            labels_dir, # generation_labels=generation_labels, generation_classes=generation_classes,
+            labels_dir, generation_labels=generation_labels, generation_classes=generation_classes,
             prior_means=prior_means, prior_stds=prior_stds, flipping=False, scaling_bounds=False, rotation_bounds=False,
             shearing_bounds=False)
     t1_im, _ = brain_generator.generate_brain()
