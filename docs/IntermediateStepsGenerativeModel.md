@@ -1,9 +1,9 @@
 Intermediate steps of the generative model
 ==========================================
 
-|           | Input Labels                                                 | Deformed Labels                                                    | GMM Sampling                                                 | Bias Corruption |
-| --------- | ------------------------------------------------------------ | ------------------------------------------------------------------ | ------------------------------------------------------------ | --------------- |
-| Example 1 | ![Input Labels](../img/table3_example1_a.jpg "Input Labels") | ![Deformed Labels](../img/table3_example1_b.jpg "Deformed Labels") | ![GMM Sampling](../img/table3_example1_c.jpg "GMM Sampling") | ![Bias Corruption](../img/table3_example1_d.jpg "Bias Corruption")                 |
+|           | Input Labels                                                 | Deformed Labels                                                    | GMM Sampling                                                 | Bias Corruption | Downsampling |
+| --------- | ------------------------------------------------------------ | ------------------------------------------------------------------ | ------------------------------------------------------------ | --------------- | --------------- |
+| Example 1 | ![Input Labels](../img/table3_example1_a.jpg "Input Labels") | ![Deformed Labels](../img/table3_example1_b.jpg "Deformed Labels") | ![GMM Sampling](../img/table3_example1_c.jpg "GMM Sampling") | ![Bias Corruption](../img/table3_example1_d.jpg "Bias Corruption") | ![Downsampling](../img/table3_example1_e.jpg "Downsampling") |
 | Example 2 |                                                              |                                                                    |                                                              |                 |
 
 1. we first randomly

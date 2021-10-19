@@ -106,6 +106,20 @@ def create_bias_corruption_image(labels_dir, result_dir, prior_means, prior_stds
                       os.path.join(result_dir, '%s_%s.nii.gz' % (output_file_name, '0000')))
 
 
+def create_downsampling_image(labels_dir, result_dir, prior_means, prior_stds):
+    generation_classes = get_generation_classes()
+    generation_labels = get_generation_labels()
+    brain_generator = \
+        BrainGenerator(
+            labels_dir, generation_labels=generation_labels, generation_classes=generation_classes,
+            prior_means=prior_means, prior_stds=prior_stds, flipping=False, scaling_bounds=False, rotation_bounds=False,
+            shearing_bounds=False, downsample=True)
+    t1_im, _ = brain_generator.generate_brain()
+    output_file_name = 'downsampling_1'
+    utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
+                      os.path.join(result_dir, '%s_%s.nii.gz' % (output_file_name, '0000')))
+
+
 if __name__ == "__main__":
     labels_dir_1 = '/home/miran045/reine097/projects/SynthSeg/data/dcan/figure3/example1/input'
     results_dir_1 = '/home/miran045/reine097/projects/SynthSeg/data/dcan/figure3/example1/output'
@@ -117,3 +131,4 @@ if __name__ == "__main__":
     t1_prior_stds = np.load(t1_prior_stds_file)
     create_gmm_sampling_image(results_dir_1, results_dir_1, t1_prior_means, t1_prior_stds)
     create_bias_corruption_image(results_dir_1, results_dir_1, t1_prior_means, t1_prior_stds)
+    create_downsampling_image(results_dir_1, results_dir_1, t1_prior_means, t1_prior_means)
