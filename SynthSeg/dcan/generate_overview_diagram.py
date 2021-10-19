@@ -294,7 +294,9 @@ def create_gmm_sampling_image(labels_dir, result_dir, prior_means, prior_stds):
         BrainGenerator(
             labels_dir, generation_labels=generation_labels, generation_classes=generation_classes,
             prior_means=prior_means, prior_stds=prior_stds, flipping=False, scaling_bounds=False, rotation_bounds=False,
-            shearing_bounds=False)
+            shearing_bounds=False,
+                 bias_field_std=0.0,
+                 bias_shape_factor=0.0)
     t1_im, _ = brain_generator.generate_brain()
     output_file_name = 'gmm_sampling_1'
     utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,

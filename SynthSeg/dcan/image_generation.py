@@ -13,7 +13,7 @@ def path_leaf(path):
     return tail or ntpath.basename(head)
 
 
-def generate_images(path_label_map, priors_folder, result_dir, n_examples):
+def generate_images(path_label_map, priors_folder, result_dir, n_examples, downsample):
     """This program generates synthetic T1-weighted or T2-weighted brain MRI scans from a label map.  Specifically, it
     allows you to impose prior distributions on the GMM parameters, so that you can can generate images of desired
     intensity distribution.  You can generate images of desired contrast by imposing specified prior distributions from
@@ -174,7 +174,8 @@ def generate_images(path_label_map, priors_folder, result_dir, n_examples):
                                      prior_stds=prior_stds,
                                      output_shape=output_shape,
                                      n_channels=2,
-                                     use_specific_stats_for_channel=True)
+                                     use_specific_stats_for_channel=True,
+                                     downsample=downsample)
 
     # create result dir
     utils.mkdir(result_dir)
