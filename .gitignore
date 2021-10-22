@@ -65,3 +65,10 @@ SynthSeg/predict_*
 /data/dcan/figure3/example1/d/t1_im/bias_corruption_0000.nii.gz
 /data/dcan/figure3/example1/e/lab/downsampling_1_1.nii.gz
 /data/dcan/figure3/example1/e/t1_im/downsampling_0000.nii.gz
+/data/dcan/figure3/example3/b/lab/deformed_labels_1.nii.gz
+/data/dcan/figure3/example3/e/t1_im/downsampling_0000.nii.gz
+/data/dcan/figure3/example3/e/lab/downsampling_1.nii.gz
+/data/dcan/figure3/example3/d/t1_im/bias_corruption_0000.nii.gz
+/data/dcan/figure3/example3/d/lab/bias_corruption_1.nii.gz
+/data/dcan/figure3/example3/c/t1_im/gmm_sampling_0000.nii.gz
+/data/dcan/figure3/example3/c/lab/gmm_sampling_1.nii.gz
