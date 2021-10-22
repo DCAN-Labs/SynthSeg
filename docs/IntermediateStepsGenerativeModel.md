@@ -3,8 +3,8 @@ Intermediate steps of the generative model
 
 |           | Input Labels                                                 | Deformed Labels                                                    | GMM Sampling                                                 | Bias Corruption | Downsampling | Inputs for training |
 | --------- | ------------------------------------------------------------ | ------------------------------------------------------------------ | ------------------------------------------------------------ | --------------- | --------------- | --------------- |
-| Example 1 | ![Input Labels](../img/table3_example1_a.jpg "Input Labels") | ![Deformed Labels](../img/table3_example1_b.jpg "Deformed Labels") | ![GMM Sampling](../img/table3_example1_c.jpg "GMM Sampling") | ![Bias Corruption](../img/table3_example1_d.jpg "Bias Corruption") | ![Downsampling](../img/table3_example1_e.jpg "Downsampling") | ![Images for training](../img/table3_example1_f.jpg "Images for training") |
-| Example 2 |                                                              |                                                                    |                                                              |                                                                    |  |
+| 8-month-old | ![Input Labels](../img/table3_example1_a.jpg "Input Labels") | ![Deformed Labels](../img/table3_example1_b.jpg "Deformed Labels") | ![GMM Sampling](../img/table3_example1_c.jpg "GMM Sampling") | ![Bias Corruption](../img/table3_example1_d.jpg "Bias Corruption") | ![Downsampling](../img/table3_example1_e.jpg "Downsampling") | ![Images for training](../img/table3_example1_f.jpg "Images for training") |
+| 4-month-old | ![Input Labels](../img/table3_example2_a.jpg "Input Labels") | ![Deformed Labels](../img/table3_example2_b.jpg "Deformed Labels") | ![GMM Sampling](../img/table3_example2_c.jpg "GMM Sampling") | ![Bias Corruption](../img/table3_example2_d.jpg "Bias Corruption") | ![Downsampling](../img/table3_example2_e.jpg "Downsampling") | ![Images for training](../img/table3_example2_f.jpg "Images for training") |
 
 1. we first randomly
 select an input label map, that is 

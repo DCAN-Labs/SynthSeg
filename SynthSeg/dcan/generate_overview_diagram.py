@@ -5,6 +5,7 @@ import numpy as np
 from SynthSeg import utils
 from SynthSeg.brain_generator import BrainGenerator
 from SynthSeg.dcan.segmentation_common import get_generation_labels, get_generation_classes, get_priors
+from ext.lab2im.utils import mkdir
 
 
 def generate_overview_diagram(path_label_map, priors_dir, result_dir):
@@ -69,11 +70,14 @@ def create_image_files(generation_classes, generation_labels, output_labels, out
 
 
 def create_deformed_labels(labels_dir, result_dir):
+    mkdir(result_dir)
     brain_generator = BrainGenerator(labels_dir)
     _, lab = brain_generator.generate_brain()
     output_file_name = 'deformed_labels_1'
-    utils.save_volume(lab, brain_generator.aff, brain_generator.header,
-                      os.path.join(result_dir, "lab", '%s.nii.gz' % output_file_name))
+    lab_dir = os.path.join(result_dir, "lab")
+    mkdir(lab_dir)
+    utils.save_volume(
+        lab, brain_generator.aff, brain_generator.header, os.path.join(lab_dir, '%s.nii.gz' % output_file_name))
 
 
 def create_gmm_sampling_image(labels_dir, result_dir, prior_means, prior_stds):
@@ -86,13 +90,19 @@ def create_gmm_sampling_image(labels_dir, result_dir, prior_means, prior_stds):
             shearing_bounds=False,
             bias_field_std=0.0,
             bias_shape_factor=0.0)
-    t1_im, lab = brain_generator.generate_brain()
-    output_file_name = 'gmm_sampling_1'
-    utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
-                      os.path.join(result_dir, 't1_im', '%s_%s.nii.gz' % (output_file_name, '0000')))
-    utils.save_volume(lab, brain_generator.aff, brain_generator.header,
-                      os.path.join(result_dir, 'lab', '%s_%s.nii.gz' % (output_file_name, '1')))
+    output_file_name = 'gmm_sampling'
+    create_images(result_dir, brain_generator, output_file_name)
 
+def create_images(result_dir, brain_generator, output_file_name):
+    t1_im, lab = brain_generator.generate_brain()
+    t1_im_dir = os.path.join(result_dir, 't1_im')
+    mkdir(t1_im_dir)
+    utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
+                      os.path.join(t1_im_dir, '%s_%s.nii.gz' % (output_file_name, '0000')))
+    lab_im_dir = os.path.join(result_dir, 'lab')
+    mkdir(lab_im_dir)
+    utils.save_volume(lab, brain_generator.aff, brain_generator.header,
+                      os.path.join(lab_im_dir, '%s_%s.nii.gz' % (output_file_name, '1')))
 
 def create_bias_corruption_image(labels_dir, result_dir, prior_means, prior_stds):
     generation_classes = get_generation_classes()
@@ -102,12 +112,8 @@ def create_bias_corruption_image(labels_dir, result_dir, prior_means, prior_stds
             labels_dir, generation_labels=generation_labels, generation_classes=generation_classes,
             prior_means=prior_means, prior_stds=prior_stds, flipping=False, scaling_bounds=False, rotation_bounds=False,
             shearing_bounds=False)
-    t1_im, lab = brain_generator.generate_brain()
-    output_file_name = 'bias_corruption_1'
-    utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
-                      os.path.join(result_dir, 't1_im', '%s_%s.nii.gz' % (output_file_name, '0000')))
-    utils.save_volume(lab, brain_generator.aff, brain_generator.header,
-                      os.path.join(result_dir, 'lab', '%s_%s.nii.gz' % (output_file_name, '1')))
+    output_file_name = 'bias_corruption'
+    create_images(result_dir, brain_generator, output_file_name)
 
 
 def create_downsampling_image(labels_dir, result_dir, prior_means, prior_stds):
@@ -118,30 +124,31 @@ def create_downsampling_image(labels_dir, result_dir, prior_means, prior_stds):
             labels_dir, generation_labels=generation_labels, generation_classes=generation_classes,
             prior_means=prior_means, prior_stds=prior_stds, flipping=False, scaling_bounds=False, rotation_bounds=False,
             shearing_bounds=False, downsample=True)
-    t1_im, lab = brain_generator.generate_brain()
-    output_file_name = 'downsampling_1'
-    utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
-                      os.path.join(result_dir, 't1_im', '%s_%s.nii.gz' % (output_file_name, '0000')))
-    utils.save_volume(lab, brain_generator.aff, brain_generator.header,
-                      os.path.join(result_dir, 'lab', '%s.nii.gz' % output_file_name))
+    output_file_name = 'downsampling'
+    create_images(result_dir, brain_generator, output_file_name)
 
 
-if __name__ == "__main__":
-    example1_dir = '../../data/dcan/figure3/example1'
-    dir_1_a = os.path.join(example1_dir, 'a')
-    dir_1_b = os.path.join(example1_dir, 'b')
-    create_deformed_labels(dir_1_a, dir_1_b)
+def create_example(example_num):
+    example_dir = '../../data/dcan/figure3/example' + str(example_num)
+    dir_a = os.path.join(example_dir, 'a')
+    dir_b = os.path.join(example_dir, 'b')
+    create_deformed_labels(dir_a, dir_b)
     priors_folder = '/home/feczk001/shared/data/nnUNet/intensity_estimation/Task511/priors/'
     t1_prior_means_file = os.path.join(priors_folder, 't1', 'prior_means.npy')
     t1_prior_means = np.load(t1_prior_means_file)
     t1_prior_stds_file = os.path.join(priors_folder, 't1', 'prior_stds.npy')
     t1_prior_stds = np.load(t1_prior_stds_file)
-    labels_dir_1_b = '../../data/dcan/figure3/example1/b/lab'
-    dir_1_c = os.path.join(example1_dir, 'c')
-    create_gmm_sampling_image(labels_dir_1_b, dir_1_c, t1_prior_means, t1_prior_stds)
-    labels_dir_1_c = os.path.join(dir_1_c, 'lab')
-    dir_1_d = os.path.join(example1_dir, 'd')
-    create_bias_corruption_image(labels_dir_1_c, dir_1_d, t1_prior_means, t1_prior_stds)
-    labels_dir_1_d = os.path.join(dir_1_d, 'lab')
-    dir_1_e = os.path.join(example1_dir, 'e')
-    create_downsampling_image(labels_dir_1_d, dir_1_e, t1_prior_means, t1_prior_means)
+    labels_dir_b = os.path.join(example_dir, 'b/lab')
+    dir_c = os.path.join(example_dir, 'c')
+    create_gmm_sampling_image(labels_dir_b, dir_c, t1_prior_means, t1_prior_stds)
+    labels_dir_c = os.path.join(dir_c, 'lab')
+    dir_d = os.path.join(example_dir, 'd')
+    create_bias_corruption_image(labels_dir_c, dir_d, t1_prior_means, t1_prior_stds)
+    labels_dir_d = os.path.join(dir_d, 'lab')
+    dir_e = os.path.join(example_dir, 'e')
+    create_downsampling_image(labels_dir_d, dir_e, t1_prior_means, t1_prior_means)
+
+
+if __name__ == "__main__":
+    create_example(1)
+    create_example(2)
