@@ -9,7 +9,7 @@ from SynthSeg.training import training
 
 
 # path training label maps
-path_training_label_maps = '../../data/training_label_maps'
+path_training_label_maps = '../../data/training_label_maps/original'
 path_model_dir = '../../models/SynthSeg_training'
 batchsize = 1
 

@@ -18,7 +18,7 @@ result_dir = './generated_examples'  # folder where examples will be saved
 # ---------- Input label maps and associated values ----------
 
 # folder containing label maps to generate images from (note that they must have a ".nii", ".nii.gz" or ".mgz" format)
-path_label_map = '../../data/training_label_maps'
+path_label_map = '../../data/training_label_maps/original'
 
 # Here we specify the structures in the label maps for which we want to generate intensities.
 # This is given as a list of label values, which do not necessarily need to be present in every label map.
@@ -39,7 +39,7 @@ path_label_map = '../../data/training_label_maps'
 #                               53,   # right hippocampus
 #                               57]   # right lesions
 # Note that plenty of structures are not represented here..... but it's just an example ! :)
-generation_labels = '../../data/labels_classes_priors/generation_labels.npy'
+generation_labels = '../../data/labels_classes_priors/original/generation_labels.npy'
 
 
 # We also have to specify the number of non-sided labels in order to differenciate them from the labels with
@@ -57,7 +57,7 @@ n_neutral_labels = 18
 # Note that in this example the labels 24 (CSF), and 507 (extra-cerebral soft tissues) are not predicted, or said
 # differently they are segmented as background.
 # Also, the left and right lesions (labels 25 and 57) are segmented as left and right white matter (labels 2 and 41).
-output_labels = '../../data/labels_classes_priors/segmentation_labels.npy'
+output_labels = '../../data/labels_classes_priors/original/segmentation_labels.npy'
 
 
 # ---------- Shape and resolution of the outputs ----------
@@ -91,7 +91,7 @@ prior_distributions = 'uniform'
 #                                        generation_classes = [0,  1,   2, 3, 4, 5,  4,  6,  7,  8,  9,  8, 10]
 # In this example labels 3 and 17 are in the same *class* 4 (that has nothing to do with *label* 4), and thus will be
 # associated to the same Gaussian distribution when sampling the GMM.
-generation_classes = '../../data/labels_classes_priors/generation_classes.npy'
+generation_classes = '../../data/labels_classes_priors/original/generation_classes.npy'
 
 
 # ---------- Spatial augmentation ----------
