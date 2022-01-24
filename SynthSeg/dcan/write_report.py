@@ -9,7 +9,6 @@ labels_file = open(os.path.join(results_dir, 'labels.txt'), 'r')
 labels_content = labels_file.read()
 labels = labels_content.split()
 labels = [int(label) for label in labels]
-labels.sort()
 labels_file.close()
 
 path_segs_file = open(os.path.join(results_dir, 'path_segs.txt'), "r")
