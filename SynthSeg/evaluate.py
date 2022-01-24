@@ -266,8 +266,11 @@ def evaluation(gt_dir,
         if summary_dir:
             if not os.path.exists(summary_dir):
                 os.makedirs(summary_dir)
-            labels_file = os.path.join(summary_dir, "labels.npy")
-            label_list.tofile(labels_file)
+            labels_file = os.path.join(summary_dir, "labels.txt")
+            label_list_file = open(labels_file, 'w')
+            for element in label_list:
+                label_list_file.write(str(element) + '\n')
+            label_list_file.close()
             textfile = open(os.path.join(summary_dir, "path_segs.txt"), "w")
             for element in path_segs:
                 textfile.write(element + "\n")
