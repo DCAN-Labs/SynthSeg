@@ -209,7 +209,8 @@ def evaluation(gt_dir,
                list_correct_labels=None,
                use_nearest_label=False,
                recompute=True,
-               verbose=True):
+               verbose=True,
+               summary_dir=None):
     """This function computes Dice scores, as well as surface distances, between two sets of labels maps in gt_dir
     (ground truth) and seg_dir (typically predictions). Labels maps in both folders are matched by sorting order.
     :param gt_dir: path of directory with gt label maps
@@ -261,6 +262,16 @@ def evaluation(gt_dir,
         label_list, _ = utils.get_list_labels(label_list=label_list, FS_sort=True, labels_dir=gt_dir)
         n_labels = len(label_list)
         max_label = np.max(label_list) + 1
+
+        if summary_dir:
+            if not os.path.exists(summary_dir):
+                os.makedirs(summary_dir)
+            labels_file = os.path.join(summary_dir, "labels.npy")
+            label_list.tofile(labels_file)
+            textfile = open(os.path.join(summary_dir, "path_segs.txt"), "w")
+            for element in path_segs:
+                textfile.write(element + "\n")
+            textfile.close()
 
         # initialise result matrices
         if compute_score_whole_structure:
