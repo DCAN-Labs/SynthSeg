@@ -273,7 +273,8 @@ def evaluation(gt_dir,
             label_list_file.close()
             textfile = open(os.path.join(summary_dir, "path_segs.txt"), "w")
             for element in path_segs:
-                textfile.write(element + "\n")
+                base_name = os.path.basename(element)
+                textfile.write(base_name + "\n")
             textfile.close()
 
         # initialise result matrices
