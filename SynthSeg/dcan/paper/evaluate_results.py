@@ -1,10 +1,12 @@
+# Author: Paul Reiners
+
 import os
 
-from SynthSeg.dcan.get_all_dcan_labels import get_all_dcan_labels
+from SynthSeg.dcan.paper.get_all_dcan_labels import get_all_dcan_labels
 from SynthSeg.evaluate import evaluation
 
 nnunet_dir = '/home/feczk001/shared/data/nnUNet/'
-mapping_file_name = '../../data/labels_classes_priors/dcan/FreeSurferColorLUT.txt'
+mapping_file_name = '../../../data/labels_classes_priors/dcan/FreeSurferColorLUT.txt'
 result_dir = f'/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/results/'
 labels_file_path = os.path.join(result_dir, 'labels.txt')
 label_list = get_all_dcan_labels(labels_file_path)
