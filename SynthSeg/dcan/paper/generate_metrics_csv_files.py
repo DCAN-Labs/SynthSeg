@@ -22,6 +22,7 @@ def generate_metrics_csv_files():
                     lines = fp.readlines()
                     paths_segs = [line.strip() for line in lines]
                 data = np.load(data_file_path)
-                df = pd.DataFrame(data, index=labels, columns=paths_segs)
+                transposed_data = data.transpose()
+                df = pd.DataFrame(transposed_data, columns=labels, index=paths_segs)
                 csv_file_path = os.path.join(results_dir, fold, measure, f'{measure}.csv')
-                df.to_csv(csv_file_path)
+                df.to_csv(csv_file_path, index_label='subject')
