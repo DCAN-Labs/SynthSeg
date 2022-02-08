@@ -5,9 +5,8 @@ import os
 from SynthSeg.dcan.paper.get_all_dcan_labels import get_all_dcan_labels
 from SynthSeg.evaluate import evaluation
 
-def evaluate_results():
+def evaluate_results(result_dir):
     nnunet_dir = '/home/feczk001/shared/data/nnUNet/'
-    result_dir = f'/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/results/'
     labels_file_path = os.path.join(result_dir, 'labels.txt')
     label_list = get_all_dcan_labels(labels_file_path)
     for i in range(10):

@@ -5,8 +5,7 @@ import numpy as np
 import pandas as pd
 
 
-def generate_metrics_csv_files():
-    results_dir = '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/results/'
+def generate_metrics_csv_files(results_dir):
     folds = ['fold{}'.format(i) for i in range(10)]
     for fold in folds:
         measures = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
