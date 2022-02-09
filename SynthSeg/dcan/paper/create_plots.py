@@ -1,18 +1,18 @@
 import os
 
 import pandas as pd
-import seaborn
+import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def create_plots(results_dir):
-    measures = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
+def create_violin_plots(results_dir, measures):
+    # https://mode.com/blog/violin-plot-examples/
     for measure in measures:
         data_file_path = os.path.join(results_dir, f'{measure}.csv')
-        df = pd.read_csv(data_file_path)
+        df = pd.read_csv(data_file_path, index_col='subject')
         cols = df.columns.tolist()
         cols = cols[:1] + [str(col) for col in sorted([int(col) for col in cols[1:]])]
         df = df[cols]
-        seaborn.set(style='whitegrid')
-        seaborn.violinplot(data=df)
+        sns.set(style='whitegrid')
+        sns.violinplot(data=df)
         plt.savefig(f'../../../img/paper/{measure}.png')

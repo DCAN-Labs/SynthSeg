@@ -5,10 +5,9 @@ import numpy as np
 import pandas as pd
 
 
-def generate_metrics_csv_files(results_dir):
+def generate_metrics_csv_files(results_dir, measures):
     folds = ['fold{}'.format(i) for i in range(10)]
     for fold in folds:
-        measures = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
         for measure in measures:
             data_file_path = os.path.join(results_dir, fold, measure, f'{measure}.npy')
             if os.path.exists(data_file_path):

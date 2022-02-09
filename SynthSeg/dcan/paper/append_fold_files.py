@@ -3,8 +3,7 @@ import pandas as pd
 from os.path import exists
 
 
-def append_fold_files(results_dir):
-    measures = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
+def append_fold_files(results_dir, measures):
     for measure in measures:
         df = None
         folds = ['fold{}'.format(i) for i in range(10)]
