@@ -14,7 +14,8 @@ def evaluate_results(result_dir):
         seg_dir = os.path.join(nnunet_dir, f'segmentations/inferred/PaperCrossValidation/Task{516 + i}_Paper_Fold{i}/')
         if os.path.exists(seg_dir):
             dir_list = os.listdir(seg_dir)
-            if len(dir_list) != 0:
+            # Ensure contains more than just plans.pkl file.
+            if len(dir_list) > 1:
                 summary_dir = os.path.join(result_dir, f'fold{i}')
                 path_hausdorff = os.path.join(summary_dir, 'hausdorff/hausdorff')
                 path_hausdorff_99 = os.path.join(summary_dir, 'hausdorff_99/hausdorff_99')
