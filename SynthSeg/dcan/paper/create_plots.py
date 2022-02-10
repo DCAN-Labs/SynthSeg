@@ -8,29 +8,27 @@ import matplotlib.pyplot as plt
 def create_violin_plots(results_dir, measures):
     # https://mode.com/blog/violin-plot-examples/
     for measure in measures:
-        data_file_path = os.path.join(results_dir, f'{measure}.csv')
-        df = pd.read_csv(data_file_path)
-        df.drop('Unknown', axis=1, inplace=True)
-        if measure == 'dice':
-            # Remove columns with zeros
-            # 0 seems to mean NaN to SynthSeg
-            df = df.loc[:, (df != 0).all(axis=0)]
-        sns.set(style='whitegrid')
+        df = set_up_plot(measure, results_dir)
         sns.violinplot(data=df, orient='h')
         plt.savefig(f'../../../img/paper/violinplot/{measure}.png')
+
+
+def set_up_plot(measure, results_dir):
+    data_file_path = os.path.join(results_dir, f'{measure}.csv')
+    df = pd.read_csv(data_file_path)
+    df.drop('Unknown', axis=1, inplace=True)
+    if measure == 'dice':
+        # Remove columns with zeros
+        # 0 seems to mean NaN to SynthSeg
+        df = df.loc[:, (df != 0).all(axis=0)]
+    sns.set(style='whitegrid')
+    return df
 
 
 def create_box_plots(results_dir, measures):
     # https://mode.com/blog/violin-plot-examples/
     for measure in measures:
-        data_file_path = os.path.join(results_dir, f'{measure}.csv')
-        df = pd.read_csv(data_file_path)
-        df.drop('Unknown', axis=1, inplace=True)
-        if measure == 'dice':
-            # Remove columns with zeros
-            # 0 seems to mean NaN to SynthSeg
-            df = df.loc[:, (df != 0).all(axis=0)]
-        sns.set(style='whitegrid')
+        df = set_up_plot(measure, results_dir)
         sns.boxplot(data=df, orient='h')
         plt.savefig(f'../../../img/paper/boxplot/{measure}.png')
 
@@ -38,14 +36,7 @@ def create_box_plots(results_dir, measures):
 def create_cat_plots(results_dir, measures):
     # https://mode.com/blog/violin-plot-examples/
     for measure in measures:
-        data_file_path = os.path.join(results_dir, f'{measure}.csv')
-        df = pd.read_csv(data_file_path)
-        df.drop('Unknown', axis=1, inplace=True)
-        if measure == 'dice':
-            # Remove columns with zeros
-            # 0 seems to mean NaN to SynthSeg
-            df = df.loc[:, (df != 0).all(axis=0)]
-        sns.set(style='whitegrid')
+        df = set_up_plot(measure, results_dir)
         sns.catplot(data=df, orient='h')
         plt.savefig(f'../../../img/paper/catplot/{measure}.png')
 
