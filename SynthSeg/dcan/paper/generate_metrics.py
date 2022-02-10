@@ -8,6 +8,8 @@ if __name__ == "__main__":
     results_dir = '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/results/'
     evaluate_results(results_dir)
     measures = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
-    generate_metrics_csv_files(results_dir, measures)
+    mapping_file = '../../../data/labels_classes_priors/dcan/Freesurfer_LUT_DCAN.md'
+    alternate_mapping_file = '../../../data/labels_classes_priors/dcan/FreeSurferColorLUT.txt'
+    generate_metrics_csv_files(results_dir, measures, mapping_file, alternate_mapping_file)
     append_fold_files(results_dir, measures)
     create_violin_plots(results_dir, measures)
