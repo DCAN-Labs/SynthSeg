@@ -16,7 +16,7 @@ def create_violin_plots(results_dir, measures):
             # 0 seems to mean NaN to SynthSeg
             df = df.loc[:, (df != 0).all(axis=0)]
         sns.set(style='whitegrid')
-        sns.violinplot(data=df, orient='h')
+        sns.boxplot(data=df, orient='h')
         plt.savefig(f'../../../img/paper/{measure}.png')
 
 if __name__ == "__main__":
