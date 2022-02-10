@@ -29,7 +29,7 @@ def create_box_plots(results_dir, measures):
     # https://mode.com/blog/violin-plot-examples/
     for measure in measures:
         df = set_up_plot(measure, results_dir)
-        sns.boxplot(data=df, orient='h')
+        sns.catplot(data=df, orient='h', kind='box')
         plt.savefig(f'../../../img/paper/boxplot/{measure}.png')
 
 
@@ -41,7 +41,7 @@ def create_cat_plots(results_dir, measures):
         plt.savefig(f'../../../img/paper/catplot/{measure}.png')
 
 if __name__ == "__main__":
-    results_folder = '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/results/'
+    results_folder = '/home/miran045/reine097/projects/SynthSeg/data/dcan/paper/measure_tables'
     msrs = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
     create_violin_plots(results_folder, msrs)
     create_box_plots(results_folder, msrs)
