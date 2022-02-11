@@ -9,10 +9,6 @@ def set_up_plot(measure, results_dir):
     data_file_path = os.path.join(results_dir, f'{measure}.csv')
     df = pd.read_csv(data_file_path)
     df.drop('Unknown', axis=1, inplace=True)
-    if measure == 'dice':
-        # Remove columns with zeros
-        # 0 seems to mean NaN to SynthSeg
-        df = df.loc[:, (df != 0).all(axis=0)]
     sns.set(style='whitegrid')
     return df
 
