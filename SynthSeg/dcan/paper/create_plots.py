@@ -42,6 +42,12 @@ def create_cat_plots(results_dir, measures):
         create_figure(measure, 'catplot')
 
 if __name__ == "__main__":
+    # Set Matplotlib defaults
+    plt.rc('figure', autolayout=True)
+    plt.rc('axes', labelweight='bold', labelsize='large',
+           titleweight='bold', titlesize=18, titlepad=10)
+    plt.rc('image', cmap='magma')
+
     results_folder = '/home/miran045/reine097/projects/SynthSeg/data/dcan/paper/measure_tables'
     msrs = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
     create_box_plots(results_folder, msrs)
