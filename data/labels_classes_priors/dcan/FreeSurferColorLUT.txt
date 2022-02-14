@@ -199,6 +199,7 @@
 152  SC-Adipose/Muscle                             238 238 209    0
 153  SC-Tissue                                     139 121  94    0
 154  Orbital-Adipose                               238  59  59    0
+172 Vermis                                  119 100 176 0
 
 201  alveus                        255 204 153	0
 202  perforant_pathway		 255	128	128	0
