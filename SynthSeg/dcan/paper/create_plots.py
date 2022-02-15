@@ -1,3 +1,5 @@
+# Author: Paul Reiners
+
 import os
 
 import pandas as pd
