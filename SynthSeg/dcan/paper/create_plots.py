@@ -1,4 +1,5 @@
 import os
+import sys
 
 import pandas as pd
 import seaborn as sns
@@ -48,7 +49,7 @@ if __name__ == "__main__":
            titleweight='bold', titlesize=18, titlepad=10)
     plt.rc('image', cmap='magma')
 
-    results_folder = '/home/miran045/reine097/projects/SynthSeg/data/dcan/paper/measure_tables'
+    results_folder = sys.argv[1]
     msrs = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
     create_box_plots(results_folder, msrs)
     create_cat_plots(results_folder, msrs)
