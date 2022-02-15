@@ -14,7 +14,6 @@ def set_up_plot(measure, results_dir):
 
 
 def create_box_plots(results_dir, measures):
-    # https://mode.com/blog/violin-plot-examples/
     for measure in measures:
         df = set_up_plot(measure, results_dir)
         sns.catplot(data=df, orient='h', kind='box')
@@ -35,7 +34,6 @@ def create_figure(measure, folder):
 
 
 def create_cat_plots(results_dir, measures):
-    # https://mode.com/blog/violin-plot-examples/
     for measure in measures:
         df = set_up_plot(measure, results_dir)
         sns.catplot(data=df, orient='h')
