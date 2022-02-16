@@ -1,5 +1,6 @@
-import logging
 import os.path
+import re
+
 import nibabel as nib
 
 # Chirality-checking constants
@@ -79,13 +80,24 @@ def correct_chirality(nifti_input_file_path, segment_lookup_table,
 if __name__ == "__main__":
     nn_unet_folder = '/home/feczk001/shared/data/nnUNet/'
     paper_cross_validation_folder = os.path.join(nn_unet_folder, 'segmentations/inferred/PaperCrossValidation/')
-    nifti_input_file = os.path.join(paper_cross_validation_folder, 'Task516_Paper_Fold0/0mo_template_07.nii.gz')
     lookup_table = '../../../data/labels_classes_priors/dcan/FreeSurferColorLUT.txt'
     l_r_mask_nifti_file = '/home/miran045/reine097/projects/CABINET/src/img_processing/Lmask.nii.gz'
-    nifti_output_file = os.path.join(paper_cross_validation_folder, 'chirality_corrected/0mo_template_07.nii.gz')
-    t1w_path = os.path.join(nn_unet_folder, 'raw_data/Task516_525/gt_labels/Fold0/0mo_template_07.nii.gz')
-    j_args = None
-    logger = logging.getLogger("my-logger")
+    for subdir, dirs, files in os.walk(paper_cross_validation_folder):
+        for file in files:
+            file_path = os.path.join(subdir, file)
+            print(file_path)
+            if not file.endswith('.nii.gz'):
+                continue
+            p = re.compile('.*(Fold\d).*')
+            m = p.match(file_path)
+            fold_name = m.group(1)
+            nifti_input_file = file_path
+            nifti_output_folder = os.path.join(paper_cross_validation_folder, f'chirality_corrected/{fold_name}')
+            is_exist = os.path.exists(nifti_output_folder)
+            if not is_exist:
+                os.makedirs(nifti_output_folder)
+            nifti_output_file = os.path.join(nifti_output_folder, f'{file}')
+            t1w_path = os.path.join(nn_unet_folder, f'raw_data/Task516_525/gt_labels/{fold_name}/{file}')
 
-    correct_chirality(nifti_input_file, lookup_table,
-                      l_r_mask_nifti_file, nifti_output_file)
+            correct_chirality(nifti_input_file, lookup_table,
+                              l_r_mask_nifti_file, nifti_output_file)
