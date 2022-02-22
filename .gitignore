@@ -72,3 +72,10 @@ SynthSeg/predict_*
 /data/dcan/figure3/example3/d/lab/bias_corruption_1.nii.gz
 /data/dcan/figure3/example3/c/t1_im/gmm_sampling_0000.nii.gz
 /data/dcan/figure3/example3/c/lab/gmm_sampling_1.nii.gz
+/data/LRmask.nii.gz
+/bin/LR_mask_registration_slurm.sh
+/bin/run_ants.sh
+/bin/correct_chirality.sh
+/bin/left_right_mask_registration_correction_slurm.sh
+/bin/left_right_registration_correction-11382936.err
+/bin/left_right_registration_correction-11382936.out
