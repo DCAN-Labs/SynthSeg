@@ -5,13 +5,14 @@ import os
 from SynthSeg.dcan.paper.get_all_dcan_labels import get_all_dcan_labels
 from SynthSeg.evaluate import evaluation
 
-def evaluate_results(result_dir):
+
+def evaluate_results(result_dir, inferred_folder):
     nnunet_dir = '/home/feczk001/shared/data/nnUNet/'
     labels_file_path = os.path.join(result_dir, 'labels.txt')
     label_list = get_all_dcan_labels(labels_file_path)
     for i in range(10):
         gt_dir = os.path.join(nnunet_dir, f'raw_data/Task516_525/gt_labels/Fold{i}/')
-        seg_dir = os.path.join(nnunet_dir, f'segmentations/inferred/PaperCrossValidation/Task{516 + i}_Paper_Fold{i}/')
+        seg_dir = os.path.join(inferred_folder, f'Task{516 + i}_Paper_Fold{i}/')
         if os.path.exists(seg_dir):
             dir_list = os.listdir(seg_dir)
             # Ensure contains more than just plans.pkl file.

@@ -7,8 +7,10 @@ from SynthSeg.dcan.paper.evaluate_results import evaluate_results
 from SynthSeg.dcan.paper.generate_metrics_csv_files import generate_metrics_csv_files
 
 if __name__ == "__main__":
-    results_dir = sys.argv[1]
-    evaluate_results(results_dir)
+    inferred_folder = sys.argv[1]
+    results_dir = sys.argv[2]
+    nnunet_dir = '/home/feczk001/shared/data/nnUNet/'
+    evaluate_results(results_dir, inferred_folder)
     measures = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
     mapping_file = '../../../data/labels_classes_priors/dcan/Freesurfer_LUT_DCAN.md'
     alternate_mapping_file = '../../../data/labels_classes_priors/dcan/FreeSurferColorLUT.txt'

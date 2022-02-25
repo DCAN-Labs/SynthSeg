@@ -1,6 +1,7 @@
 # Author: Paul Reiners
 
 import os
+from os.path import exists
 
 from SynthSeg.dcan.img_processing.left_right_registration_correction import left_right_registration_correction
 
@@ -28,9 +29,10 @@ def process_file(fold_number, file_base_name):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     nifti_output_file_pth = os.path.join(output_folder, f'{file_base_name}.nii.gz')
-    left_right_registration_correction(
-        sbjct_hd, tmplt_hd, nifti_input_file_pth, segment_lookup_tbl, l_r_mask, output_mask_fl,
-        nifti_output_file_pth)
+    if not exists(nifti_output_file_pth):
+        left_right_registration_correction(
+            sbjct_hd, tmplt_hd, nifti_input_file_pth, segment_lookup_tbl, l_r_mask, output_mask_fl,
+            nifti_output_file_pth)
 
 
 def correct_chirality_for_folder():
