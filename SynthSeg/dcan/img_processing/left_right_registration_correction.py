@@ -52,10 +52,15 @@ if __name__ == '__main__':
             nnunet_folder,
             'segmentations/inferred/PaperCrossValidation/Task516_Paper_Fold0/0mo_template_07.nii.gz')
     segment_lookup_tbl = os.path.join(data_dir, 'labels_classes_priors/dcan/FreeSurferColorLUT.txt')
-    l_r_mask = os.path.join(data_dir, 'sub-00006_ses-20170806_aseg_mask.nii.gz')
+
+    # both the input and output masks should be left right
+    l_r_mask = os.path.join(data_dir, '1mo_template_LRmask.nii.gz')
     paper_cross_validation_folder = '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/'
     output_mask_fl = \
         os.path.join(paper_cross_validation_folder, 'chirality_correction_masks/0mo_template_07_LRmask.nii.gz')
+    # the purpose here is to take the left right mask from the template and project it onto the native subject -- and
+    # then the chirality correction will use the subject-aligned left right mask to perform the correction
+    # the aseg_mask is neither, its just a binary mask of the brain
     nifti_output_file_pth = \
         os.path.join(paper_cross_validation_folder, 'chirality_corrected/0mo_template_07.nii.gz')
     left_right_registration_correction(

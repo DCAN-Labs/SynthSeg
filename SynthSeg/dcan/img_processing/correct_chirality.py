@@ -6,6 +6,7 @@ Usage:
 Options:
   -h --help     Show this screen.
 """
+import os
 
 import nibabel as nib
 import chirality_constants
@@ -63,4 +64,16 @@ def correct_chirality(nifti_input_file_path, segment_lookup_table, left_right_ma
 
 
 if __name__ == "__main__":
-    correct_chirality(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    nnunet_folder = '/home/feczk001/shared/data/nnUNet/'
+    nifti_input_file_pth = os.path.join(
+            nnunet_folder,
+            'segmentations/inferred/PaperCrossValidation/original/Task516_Paper_Fold0/0mo_template_07.nii.gz')
+    data_dir = '/home/miran045/reine097/projects/SynthSeg/data/'
+    segment_lookup_tbl = os.path.join(data_dir, 'labels_classes_priors/dcan/FreeSurferColorLUT.txt')
+    left_right_mask_nifti_fl = \
+        '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/chirality_correction_masks/' \
+        '0mo_template_07_LRmask.nii.gz'
+    paper_cross_validation_folder = '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/'
+    nifti_output_file_pth = \
+        os.path.join(paper_cross_validation_folder, 'chirality_corrected/0mo_template_07.nii.gz')
+    correct_chirality(nifti_input_file_pth, segment_lookup_tbl, left_right_mask_nifti_fl, nifti_output_file_pth)
