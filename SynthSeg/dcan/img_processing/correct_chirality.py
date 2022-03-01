@@ -71,8 +71,8 @@ if __name__ == "__main__":
     data_dir = '/home/miran045/reine097/projects/SynthSeg/data/'
     segment_lookup_tbl = os.path.join(data_dir, 'labels_classes_priors/dcan/FreeSurferColorLUT.txt')
     left_right_mask_nifti_fl = \
-        '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/chirality_correction_masks/' \
-        '0mo_template_07_LRmask.nii.gz'
+        '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/orig_chircorr_templates/' \
+        '1mo_template_LRmask.nii.gz'
     paper_cross_validation_folder = '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/'
     nifti_output_file_pth = \
         os.path.join(paper_cross_validation_folder, 'chirality_corrected/0mo_template_07.nii.gz')

@@ -45,8 +45,6 @@ if __name__ == '__main__':
     sbjct_hd = \
         '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task516_Paper_Fold0/imagesTs/' \
         '1mo_sub-439083_0001.nii.gz'
-    #    '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task516_Paper_Fold0/imagesTs/' \
-    #    '0mo_template_07_0000.nii.gz'
     data_dir = '/home/miran045/reine097/projects/SynthSeg/data/'
     tmplt_hd = \
         '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/orig_chircorr_templates/' \
@@ -54,7 +52,6 @@ if __name__ == '__main__':
     nifti_input_file_pth = os.path.join(
             nnunet_folder,
             'segmentations/inferred/PaperCrossValidation/original/Task516_Paper_Fold0/1mo_sub-439083.nii.gz')
-    #        'segmentations/inferred/PaperCrossValidation/original/Task516_Paper_Fold0/0mo_template_07.nii.gz')
     segment_lookup_tbl = os.path.join(data_dir, 'labels_classes_priors/dcan/FreeSurferColorLUT.txt')
 
     # both the input and output masks should be left right
@@ -64,14 +61,12 @@ if __name__ == '__main__':
     paper_cross_validation_folder = '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/'
     output_mask_fl = \
         '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/LR_masks/1mo_sub-439083_LRmask.nii.gz'
-        #'/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/LR_masks/0mo_template_07_LRmask.nii.gz'
     # the purpose here is to take the left right mask from the template and project it onto the native subject -- and
     # then the chirality correction will use the subject-aligned left right mask to perform the correction
     # the aseg_mask is neither, its just a binary mask of the brain
     nifti_output_file_pth = \
         '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/chirality_corrected/' \
         'Task516_Paper_Fold0/1mo_sub-439083.nii.gz'
-        #'Task516_Paper_Fold0/0mo_template_07.nii.gz'
     left_right_registration_correction(
         sbjct_hd, tmplt_hd, nifti_input_file_pth, segment_lookup_tbl, l_r_mask, output_mask_fl,
         nifti_output_file_pth)
