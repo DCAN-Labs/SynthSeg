@@ -47,7 +47,7 @@ if __name__ == '__main__':
         os.path.join(
             nnunet_folder,
             'nnUNet_raw_data_base/nnUNet_raw_data/Task516_Paper_Fold0/imagesTs/1mo_sub-439083_0001.nii.gz')
-    data_dir = '/home/miran045/reine097/projects/SynthSeg/data/'
+    data_dir = '/data/'
     tmplt_hd = \
         os.path.join(
             nnunet_folder,

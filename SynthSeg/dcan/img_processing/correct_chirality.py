@@ -9,9 +9,9 @@ Options:
 import os
 
 import nibabel as nib
-import chirality_constants
+
+from SynthSeg.dcan.img_processing import chirality_constants
 from SynthSeg.dcan.look_up_tables import get_id_to_region_mapping
-import sys
 
 RIGHT = 'Right-'
 LEFT = 'Left-'

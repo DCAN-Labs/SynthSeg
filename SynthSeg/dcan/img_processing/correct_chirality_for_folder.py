@@ -3,7 +3,7 @@
 import os
 from os.path import exists
 
-from SynthSeg.dcan.img_processing.left_right_registration_correction import left_right_registration_correction
+from SynthSeg.dcan.img_processing.chirality_correction.left_right_registration_correction import left_right_registration_correction
 
 
 def process_file(fold_number, file_base_name):
