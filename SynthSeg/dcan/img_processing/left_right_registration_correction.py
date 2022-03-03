@@ -42,31 +42,35 @@ def left_right_registration_correction(
 
 if __name__ == '__main__':
     nnunet_folder = '/home/feczk001/shared/data/nnUNet/'
+    paper_cross_validation_folder = 'segmentations/inferred/PaperCrossValidation/'
     sbjct_hd = \
-        '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task516_Paper_Fold0/imagesTs/' \
-        '1mo_sub-439083_0001.nii.gz'
+        os.path.join(
+            nnunet_folder,
+            'nnUNet_raw_data_base/nnUNet_raw_data/Task516_Paper_Fold0/imagesTs/1mo_sub-439083_0001.nii.gz')
     data_dir = '/home/miran045/reine097/projects/SynthSeg/data/'
     tmplt_hd = \
-        '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/orig_chircorr_templates/' \
-        '1mo_T2w_acpc_dc_restore.nii.gz'
-    nifti_input_file_pth = os.path.join(
+        os.path.join(
             nnunet_folder,
-            'segmentations/inferred/PaperCrossValidation/original/Task516_Paper_Fold0/1mo_sub-439083.nii.gz')
+            paper_cross_validation_folder, 'orig_chircorr_templates/1mo_T2w_acpc_dc_restore.nii.gz')
+    nifti_input_file_pth = os.path.join(
+        nnunet_folder,
+        paper_cross_validation_folder, 'original/Task516_Paper_Fold0/1mo_sub-439083.nii.gz')
     segment_lookup_tbl = os.path.join(data_dir, 'labels_classes_priors/dcan/FreeSurferColorLUT.txt')
 
     # both the input and output masks should be left right
     l_r_mask = \
-        '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/orig_chircorr_templates/' \
-        '1mo_template_LRmask.nii.gz'
-    paper_cross_validation_folder = '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/'
-    output_mask_fl = \
-        '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/LR_masks/1mo_sub-439083_LRmask.nii.gz'
+        os.path.join(
+            nnunet_folder,
+            paper_cross_validation_folder, 'orig_chircorr_templates/1mo_template_LRmask.nii.gz')
+    output_mask_fl = os.path.join(
+        nnunet_folder,
+        paper_cross_validation_folder, 'LR_masks/1mo_sub-439083_LRmask.nii.gz')
     # the purpose here is to take the left right mask from the template and project it onto the native subject -- and
     # then the chirality correction will use the subject-aligned left right mask to perform the correction
     # the aseg_mask is neither, its just a binary mask of the brain
-    nifti_output_file_pth = \
-        '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/chirality_corrected/' \
-        'Task516_Paper_Fold0/1mo_sub-439083.nii.gz'
+    nifti_output_file_pth = os.path.join(
+        nnunet_folder,
+        paper_cross_validation_folder, 'chirality_corrected/Task516_Paper_Fold0/1mo_sub-439083.nii.gz')
     left_right_registration_correction(
         sbjct_hd, tmplt_hd, nifti_input_file_pth, segment_lookup_tbl, l_r_mask, output_mask_fl,
         nifti_output_file_pth)
