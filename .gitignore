@@ -79,3 +79,10 @@ SynthSeg/predict_*
 /bin/left_right_mask_registration_correction_slurm.sh
 /bin/left_right_registration_correction-11382936.err
 /bin/left_right_registration_correction-11382936.out
+/bin/left_right_registration_correction-11589961.err
+/bin/left_right_registration_correction-11589961.out
+/data/1mo_template_LRmask.nii.gz
+/data/sub-00006_ses-20170806_aseg_mask.nii.gz
+/data/sub-00006_T1w_acpc_dc_restore.nii.gz
+/SynthSeg/dcan/img_processing/correct_chirality-11587352.err
+/SynthSeg/dcan/img_processing/correct_chirality-11587352.out
