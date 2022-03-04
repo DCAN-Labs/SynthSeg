@@ -23,7 +23,7 @@ def correct_chirality_for_fold(fold):
         nifti_file_extension = '.nii.gz'
         file_base_name = filename[:-len(nifti_file_extension)]
         if age_in_months == 0:
-            continue
+            age_in_months = 1
         sbjct_hd = \
             os.path.join(
                 nnunet_folder,
@@ -46,9 +46,13 @@ def correct_chirality_for_fold(fold):
         # the purpose here is to take the left right mask from the template and project it onto the native subject --
         # and then the chirality correction will use the subject-aligned left right mask to perform the correction
         # the aseg_mask is neither, its just a binary mask of the brain
-        nifti_output_file_pth = os.path.join(
+        nifti_output_folder = os.path.join(
             nnunet_folder,
-            paper_cross_validation_folder, f'chirality_corrected/Task{str(516 + fold)}_Paper_Fold{str(fold)}', filename)
+            paper_cross_validation_folder, f'chirality_corrected/Task{str(516 + fold)}_Paper_Fold{str(fold)}')
+        is_exist = os.path.exists(nifti_output_folder)
+        if not is_exist:
+            os.makedirs(nifti_output_folder)
+        nifti_output_file_pth = os.path.join(nifti_output_folder, filename)
         file_exists = exists(nifti_output_file_pth)
         if file_exists:
             continue
@@ -62,5 +66,5 @@ def correct_chirality_for_fold(fold):
 
 
 if __name__ == '__main__':
-    for fold in range(10):
-        correct_chirality_for_fold(fold)
+    for fld in range(10):
+        correct_chirality_for_fold(fld)

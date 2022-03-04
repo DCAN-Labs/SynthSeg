@@ -86,3 +86,15 @@ SynthSeg/predict_*
 /data/sub-00006_T1w_acpc_dc_restore.nii.gz
 /SynthSeg/dcan/img_processing/correct_chirality-11587352.err
 /SynthSeg/dcan/img_processing/correct_chirality-11587352.out
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11618187.err
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11618187.out
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11618817.err
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11618817.out
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11618972.err
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11618972.out
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11627604.err
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11627604.out
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11631114.err
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11631114.out
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11636588.err
+/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11636588.out
