@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 
 def set_up_plot(measure, results_dir):
-    data_file_path = os.path.join(results_dir, f'{measure}.csv')
+    data_file_path = os.path.join(results_dir, measure, f'{measure}.csv')
     df = pd.read_csv(data_file_path)
     df.drop('Unknown', axis=1, inplace=True)
     sns.set(style='whitegrid')
@@ -20,10 +20,10 @@ def create_box_plots(results_dir, measures):
     for measure in measures:
         df = set_up_plot(measure, results_dir)
         sns.catplot(data=df, orient='h', kind='box')
-        create_figure(measure, 'boxplot')
+        create_figure(results_dir, measure, 'boxplot')
 
 
-def create_figure(measure, folder):
+def create_figure(results_dir, measure, folder):
     fig = plt.gcf()
     plt.ylabel("Region")
     plt.title(measure)
@@ -33,14 +33,25 @@ def create_figure(measure, folder):
     else:
         height = 11.0
     fig.set_size_inches(width, height)
-    plt.savefig(f'../../../img/paper/{folder}/{measure}.png', dpi=100)
+    fig_folder = os.path.join(results_dir, folder)
+    if not os.path.exists(fig_folder):
+        os.makedirs(fig_folder)
+    plt.savefig(os.path.join(fig_folder, f'{measure}.png'), dpi=100)
 
 
 def create_cat_plots(results_dir, measures):
     for measure in measures:
         df = set_up_plot(measure, results_dir)
         sns.catplot(data=df, orient='h')
-        create_figure(measure, 'catplot')
+        create_figure(results_dir, measure, 'catplot')
+
+
+def create_strip_plots(results_dir, measures):
+    for measure in measures:
+        df = set_up_plot(measure, results_dir)
+        sns.stripplot(data=df, orient='h')
+        create_figure(results_dir, measure, 'stripplot')
+
 
 if __name__ == "__main__":
     # Set Matplotlib defaults
@@ -53,3 +64,4 @@ if __name__ == "__main__":
     msrs = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
     create_box_plots(results_folder, msrs)
     create_cat_plots(results_folder, msrs)
+    create_strip_plots(results_folder, msrs)
