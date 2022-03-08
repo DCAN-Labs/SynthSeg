@@ -8,17 +8,20 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def set_up_plot(measure, results_dir):
-    data_file_path = os.path.join(results_dir, measure, f'{measure}.csv')
+def set_up_plot(measure, results_dir, include_measure_dir=True):
+    if include_measure_dir:
+        data_file_path = os.path.join(results_dir, measure, f'{measure}.csv')
+    else:
+        data_file_path = os.path.join(results_dir, f'{measure}.csv')
     df = pd.read_csv(data_file_path)
     df.drop('Unknown', axis=1, inplace=True)
     sns.set(style='whitegrid')
     return df
 
 
-def create_box_plots(results_dir, measures):
+def create_box_plots(results_dir, measures, include_measure_dir=True):
     for measure in measures:
-        df = set_up_plot(measure, results_dir)
+        df = set_up_plot(measure, results_dir, include_measure_dir)
         sns.catplot(data=df, orient='h', kind='box')
         create_figure(results_dir, measure, 'boxplot')
 
@@ -39,16 +42,16 @@ def create_figure(results_dir, measure, folder):
     plt.savefig(os.path.join(fig_folder, f'{measure}.png'), dpi=100)
 
 
-def create_cat_plots(results_dir, measures):
+def create_cat_plots(results_dir, measures, include_measure_dir=True):
     for measure in measures:
-        df = set_up_plot(measure, results_dir)
+        df = set_up_plot(measure, results_dir, include_measure_dir)
         sns.catplot(data=df, orient='h')
         create_figure(results_dir, measure, 'catplot')
 
 
-def create_strip_plots(results_dir, measures):
+def create_strip_plots(results_dir, measures, include_measure_dir=True):
     for measure in measures:
-        df = set_up_plot(measure, results_dir)
+        df = set_up_plot(measure, results_dir, include_measure_dir)
         sns.stripplot(data=df, orient='h')
         create_figure(results_dir, measure, 'stripplot')
 
