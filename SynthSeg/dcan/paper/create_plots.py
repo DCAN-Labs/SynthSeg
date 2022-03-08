@@ -15,6 +15,7 @@ def set_up_plot(measure, results_dir, include_measure_dir=True):
         data_file_path = os.path.join(results_dir, f'{measure}.csv')
     df = pd.read_csv(data_file_path)
     df.drop('Unknown', axis=1, inplace=True)
+    plt.clf()
     sns.set(style='whitegrid')
     return df
 
