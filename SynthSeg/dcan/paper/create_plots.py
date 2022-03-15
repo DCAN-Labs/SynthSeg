@@ -17,6 +17,7 @@ def set_up_plot(measure, results_dir, include_measure_dir=True):
     df.drop('Unknown', axis=1, inplace=True)
     plt.clf()
     sns.set(style='whitegrid')
+    sns.color_palette("colorblind")
     return df
 
 
@@ -46,7 +47,16 @@ def create_figure(results_dir, measure, folder):
 def create_cat_plots(results_dir, measures, include_measure_dir=True):
     for measure in measures:
         df = set_up_plot(measure, results_dir, include_measure_dir)
-        sns.catplot(data=df, orient='h')
+        # make boxplot with Catplot
+        sns.catplot(kind="box",
+                    data=df,
+                    height=4,
+                    aspect=1.5, orient='h')
+        # add data points to boxplot with stripplot
+        sns.stripplot(data=df,
+                      alpha=0.3,
+                      jitter=0.2,
+                      color='k', orient='h')
         create_figure(results_dir, measure, 'catplot')
 
 
@@ -66,6 +76,4 @@ if __name__ == "__main__":
 
     results_folder = sys.argv[1]
     msrs = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
-    create_box_plots(results_folder, msrs)
-    create_cat_plots(results_folder, msrs)
-    create_strip_plots(results_folder, msrs)
+    create_cat_plots(results_folder, msrs, include_measure_dir=False)

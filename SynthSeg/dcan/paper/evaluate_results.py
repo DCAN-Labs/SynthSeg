@@ -2,7 +2,7 @@
 import os
 import sys
 
-from SynthSeg.dcan.paper.create_plots import create_box_plots, create_cat_plots, create_strip_plots
+from SynthSeg.dcan.paper.create_plots import create_cat_plots
 from SynthSeg.dcan.paper.generate_metrics_csv_files import generate_metrics_csv_files
 from SynthSeg.dcan.paper.get_all_dcan_labels import get_all_dcan_labels
 from SynthSeg.evaluate import evaluation
@@ -42,6 +42,4 @@ if __name__ == "__main__":
     mapping_file = '../../../data/labels_classes_priors/dcan/Freesurfer_LUT_DCAN.md'
     alternate_mapping_file = '../../../data/labels_classes_priors/dcan/FreeSurferColorLUT.txt'
     generate_metrics_csv_files(results_dir, measures, mapping_file, alternate_mapping_file, labels_file_pth)
-    create_box_plots(results_dir, measures)
     create_cat_plots(results_dir, measures)
-    create_strip_plots(results_dir, measures)
