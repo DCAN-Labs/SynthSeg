@@ -1,15 +1,39 @@
 # Author: Paul Reiners
 import os
 import sys
+import numpy as np
+import pandas as pd
 
+from SynthSeg.dcan.look_up_tables import get_id_to_region_mapping
 from SynthSeg.dcan.paper.create_plots import create_cat_plots
-from SynthSeg.dcan.paper.generate_metrics_csv_files import generate_metrics_csv_files
 from SynthSeg.dcan.paper.get_all_dcan_labels import get_all_dcan_labels
 from SynthSeg.evaluate import evaluation
 
 
-def evaluate_results(gt_dir, inferred_folder, labels_file_path, result_dir):
-    label_list = get_all_dcan_labels(labels_file_path)
+def generate_metrics_csv_files(results_dir, measures, mapping_file_name, alternate_mapping_file_name, labels):
+    for measure in measures:
+        data_file_path = os.path.join(results_dir, measure, f'{measure}.npy')
+        assert os.path.exists(data_file_path)
+        path_segs_path = os.path.join(results_dir, 'path_segs.txt')
+        with open(path_segs_path) as fp:
+            lines = fp.readlines()
+            paths_segs = [line.strip() for line in lines]
+        data = np.load(data_file_path)
+        transposed_data = data.transpose()
+        id_to_region = get_id_to_region_mapping(mapping_file_name, separator=None)
+        alternate_id_to_region = get_id_to_region_mapping(alternate_mapping_file_name, separator=None)
+        for item in alternate_id_to_region.items():
+            identifier = item[0]
+            if identifier not in id_to_region.keys():
+                region = item[1]
+                id_to_region[identifier] = region
+        regions = [id_to_region[label] for label in labels]
+        df = pd.DataFrame(transposed_data, columns=regions, index=paths_segs)
+        csv_file_path = os.path.join(results_dir, measure, f'{measure}.csv')
+        df.to_csv(csv_file_path, index_label='subject')
+
+
+def evaluate_results(gt_dir, inferred_folder, label_list, result_dir):
     assert os.path.exists(gt_dir)
     dir_list = os.listdir(gt_dir)
     # Ensure contains more than just plans.pkl file.
@@ -31,15 +55,20 @@ def evaluate_measures(gt_dir, inferred_folder, label_list, result_dir):
                summary_dir=result_dir)
 
 
+def get_label_list(labels_file_pth):
+    label_list = get_all_dcan_labels(labels_file_pth)
+
+    return label_list
+
+
 if __name__ == "__main__":
     gt_folder = sys.argv[1]
     inferred_dir = sys.argv[2]
-    results_dir = sys.argv[3]
-    labels_file_pth = \
-        os.path.join('/home/miran045/reine097/projects/SynthSeg/data/labels_classes_priors/dcan', 'labels.txt')
-    evaluate_results(gt_folder, inferred_dir, labels_file_pth, results_dir)
-    measures = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
+    results_folder = sys.argv[3]
+    label_lst = get_label_list(os.path.join('../../../data', 'labels table.txt'))
+    evaluate_results(gt_folder, inferred_dir, label_lst, results_folder)
+    metrics = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
     mapping_file = '../../../data/labels_classes_priors/dcan/Freesurfer_LUT_DCAN.md'
     alternate_mapping_file = '../../../data/labels_classes_priors/dcan/FreeSurferColorLUT.txt'
-    generate_metrics_csv_files(results_dir, measures, mapping_file, alternate_mapping_file, labels_file_pth)
-    create_cat_plots(results_dir, measures)
+    generate_metrics_csv_files(results_folder, metrics, mapping_file, alternate_mapping_file, label_lst)
+    create_cat_plots(results_folder, metrics)
