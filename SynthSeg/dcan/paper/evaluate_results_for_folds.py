@@ -26,18 +26,17 @@ if __name__ == "__main__":
     inferred_dir = sys.argv[1]
     results_dir = sys.argv[2]
     dcan_folder = '/home/miran045/reine097/projects/SynthSeg/data/labels_classes_priors/dcan/'
-    labels_file_pth = os.path.join(dcan_folder, 'labels.txt')
+    labels_file_pth = '/home/miran045/reine097/projects/SynthSeg/data/labels table.txt'
     nnunet_dir = '/home/feczk001/shared/data/nnUNet/'
     gt_root_folder = os.path.join(nnunet_dir, 'raw_data/Task516_525/gt_labels/')
     evaluate_results(results_dir, inferred_dir, labels_file_pth, gt_root_folder)
     measures = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
     mapping_file = os.path.join(dcan_folder, 'Freesurfer_LUT_DCAN.md')
     alternate_mapping_file = os.path.join(dcan_folder, 'FreeSurferColorLUT.txt')
+    labels = get_all_dcan_labels(labels_file_pth)
     for i in range(10):
         results_sub_dir = os.path.join(results_dir, f'fold{i}')
         generate_metrics_csv_files(
-            results_sub_dir, measures, mapping_file, alternate_mapping_file, labels_file_pth)
+            results_sub_dir, measures, mapping_file, alternate_mapping_file, labels)
     append_fold_files(results_dir, measures)
-    create_box_plots(results_dir, measures, False)
     create_cat_plots(results_dir, measures, False)
-    create_strip_plots(results_dir, measures, False)

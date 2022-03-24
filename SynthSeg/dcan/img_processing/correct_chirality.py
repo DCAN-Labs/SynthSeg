@@ -1,13 +1,3 @@
-"""
-Correct chirality.
-Usage:
-  correct_chirality <nifti_input_file_path> <segment_lookup_table> <left_right_mask_nifti_file> <nifti_output_file_path>
-  correct_chirality -h | --help
-Options:
-  -h --help     Show this screen.
-"""
-import os
-
 import nibabel as nib
 
 from SynthSeg.dcan.img_processing import chirality_constants
@@ -61,19 +51,3 @@ def correct_chirality(nifti_input_file_path, segment_lookup_table, left_right_ma
                     check_and_correct_region(False, region, segment_name_to_number, new_data, i, j, k)
     fixed_img = nib.Nifti1Image(new_data, img.affine, img.header)
     nib.save(fixed_img, nifti_output_file_path)
-
-
-if __name__ == "__main__":
-    nnunet_folder = '/home/feczk001/shared/data/nnUNet/'
-    nifti_input_file_pth = os.path.join(
-            nnunet_folder,
-            'segmentations/inferred/PaperCrossValidation/original/Task516_Paper_Fold0/0mo_template_07.nii.gz')
-    data_dir = '/home/miran045/reine097/projects/SynthSeg/data/'
-    segment_lookup_tbl = os.path.join(data_dir, 'labels_classes_priors/dcan/FreeSurferColorLUT.txt')
-    left_right_mask_nifti_fl = \
-        '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/orig_chircorr_templates/' \
-        '1mo_template_LRmask.nii.gz'
-    paper_cross_validation_folder = '/home/feczk001/shared/data/nnUNet/segmentations/inferred/PaperCrossValidation/'
-    nifti_output_file_pth = \
-        os.path.join(paper_cross_validation_folder, 'chirality_corrected/0mo_template_07.nii.gz')
-    correct_chirality(nifti_input_file_pth, segment_lookup_tbl, left_right_mask_nifti_fl, nifti_output_file_pth)
