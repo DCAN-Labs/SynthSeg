@@ -98,3 +98,4 @@ SynthSeg/predict_*
 /SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11631114.out
 /SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11636588.err
 /SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_fold-11636588.out
+/data/LR_masks/
