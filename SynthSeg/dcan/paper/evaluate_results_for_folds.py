@@ -3,7 +3,7 @@ import os
 import sys
 
 from SynthSeg.dcan.paper.append_fold_files import append_fold_files
-from SynthSeg.dcan.paper.create_plots import create_box_plots, create_cat_plots, create_strip_plots
+from SynthSeg.dcan.paper.create_plots import create_cat_plots
 from SynthSeg.dcan.paper.evaluate_results import evaluate_measures
 from SynthSeg.dcan.paper.generate_metrics_csv_files import generate_metrics_csv_files
 from SynthSeg.dcan.paper.get_all_dcan_labels import get_all_dcan_labels
@@ -26,17 +26,15 @@ if __name__ == "__main__":
     inferred_dir = sys.argv[1]
     results_dir = sys.argv[2]
     dcan_folder = '/home/miran045/reine097/projects/SynthSeg/data/labels_classes_priors/dcan/'
-    labels_file_pth = '/home/miran045/reine097/projects/SynthSeg/data/labels table.txt'
     nnunet_dir = '/home/feczk001/shared/data/nnUNet/'
     gt_root_folder = os.path.join(nnunet_dir, 'raw_data/Task516_525/gt_labels/')
-    evaluate_results(results_dir, inferred_dir, labels_file_pth, gt_root_folder)
+    mapping_file = os.path.join(dcan_folder, 'Freesurfer_LUT_DCAN.txt')
+    evaluate_results(results_dir, inferred_dir, mapping_file, gt_root_folder)
     measures = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
-    mapping_file = os.path.join(dcan_folder, 'Freesurfer_LUT_DCAN.md')
-    alternate_mapping_file = os.path.join(dcan_folder, 'FreeSurferColorLUT.txt')
-    labels = get_all_dcan_labels(labels_file_pth)
+    labels = get_all_dcan_labels(mapping_file)
     for i in range(10):
         results_sub_dir = os.path.join(results_dir, f'fold{i}')
         generate_metrics_csv_files(
-            results_sub_dir, measures, mapping_file, alternate_mapping_file, labels)
+            results_sub_dir, measures, mapping_file)
     append_fold_files(results_dir, measures)
     create_cat_plots(results_dir, measures, False)
