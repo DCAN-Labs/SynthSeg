@@ -29,7 +29,3 @@ labels    structures
 58  Right-Accumbens-area                    255 165 0   0
 60  Right-VentralDC                         165 42  42  0
 172 Vermis                                  119 100 176 0
-159 Left-Cerebral-WM-unmyelinated
-160 Right-Cerebral-WM-unmyelinated   
-161 Left-Cerebral-WM-myelinated            
-162 Right-Cerebral-WM-myelinated
