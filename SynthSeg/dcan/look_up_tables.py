@@ -5,7 +5,7 @@ def get_id_to_region_mapping(mapping_file_name, separator=None):
     id_to_region = {}
     for line in lines:
         line = line.strip()
-        if line.startswith('#') or line == '':
+        if line.startswith('#') or line == '' or line.startswith('labels'):
             continue
         if separator:
             parts = line.split(separator)
@@ -33,7 +33,7 @@ def get_id_to_rgb(mapping_file_name, separator=None):
         if separator:
             parts = line.split(separator)
         else:
-            parts = line.s.plit()
+            parts = line.split()
         region_id = int(parts[0])
         r = int(parts[2])
         g = int(parts[3])

@@ -10,7 +10,11 @@ def get_all_dcan_labels(labels_file_path):
         while not lines[index].startswith('labels'):
             index += 1
         index += 1
-        lbls = [int(line[:2].strip()) for line in lines[index:]]
+        lbls = []
+        for line in lines[index:]:
+            parts = line.split()
+            lbl = int(parts[0])
+            lbls.append(lbl)
     return lbls
 
 

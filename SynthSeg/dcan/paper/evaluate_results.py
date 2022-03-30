@@ -10,18 +10,16 @@ from SynthSeg.dcan.paper.get_all_dcan_labels import get_all_dcan_labels
 from SynthSeg.evaluate import evaluation
 
 
-def generate_metrics_csv_files(results_dir, measures, mapping_file_name, alternate_mapping_file_name, labels):
+def generate_metrics_csv_files(results_dir, measures, mapping_file_name):
     path_segs_path = os.path.join(results_dir, 'path_segs.txt')
     with open(path_segs_path) as fp:
         lines = fp.readlines()
         paths_segs = [line.strip() for line in lines]
+    labels_path = os.path.join(results_dir, 'labels.txt')
+    with open(labels_path) as fp:
+        lines = fp.readlines()
+        labels = [int(line.strip()) for line in lines]
     id_to_region = get_id_to_region_mapping(mapping_file_name, separator=None)
-    alternate_id_to_region = get_id_to_region_mapping(alternate_mapping_file_name, separator=None)
-    for item in alternate_id_to_region.items():
-        identifier = item[0]
-        if identifier not in id_to_region.keys():
-            region = item[1]
-            id_to_region[identifier] = region
     regions = [id_to_region[label] for label in labels]
     for measure in measures:
         data_file_path = os.path.join(results_dir, measure, f'{measure}.npy')
@@ -52,7 +50,7 @@ def evaluate_measures(gt_dir, inferred_folder, label_list, result_dir):
                label_list, path_hausdorff=path_hausdorff, path_hausdorff_99=path_hausdorff_99,
                path_hausdorff_95=path_hausdorff_95, path_mean_distance=path_mean_distance,
                path_dice=path_dice,
-               summary_dir=result_dir)
+               summary_dir=result_dir, crop_margin_around_gt=None)
 
 
 def get_label_list(labels_file_pth):
@@ -65,10 +63,10 @@ if __name__ == "__main__":
     gt_folder = sys.argv[1]
     inferred_dir = sys.argv[2]
     results_folder = sys.argv[3]
-    label_lst = get_label_list(os.path.join('../../../data', 'labels table.txt'))
+    label_list_path = os.path.join('../../../data/labels_classes_priors/dcan', 'Freesurfer_LUT_DCAN.txt')
+    label_lst = get_label_list(label_list_path)
     evaluate_results(gt_folder, inferred_dir, label_lst, results_folder)
     metrics = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
-    mapping_file = '../../../data/labels_classes_priors/dcan/Freesurfer_LUT_DCAN.md'
-    alternate_mapping_file = '../../../data/labels_classes_priors/dcan/FreeSurferColorLUT.txt'
-    generate_metrics_csv_files(results_folder, metrics, mapping_file, alternate_mapping_file, label_lst)
+    mapping_file = '../../../data/labels_classes_priors/dcan/Freesurfer_LUT_DCAN.txt'
+    generate_metrics_csv_files(results_folder, metrics, label_list_path)
     create_cat_plots(results_folder, metrics)

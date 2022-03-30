@@ -8,7 +8,7 @@ from SynthSeg.dcan.paper.evaluate_results import get_label_list, generate_metric
 if __name__ == "__main__":
     results_folder = sys.argv[1]
     msrs = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
-    mapping_file = '../../../data/labels_classes_priors/dcan/Freesurfer_LUT_DCAN.md'
+    mapping_file = '../../../data/labels_classes_priors/dcan/Freesurfer_LUT_DCAN.txt'
     alternate_mapping_file = '../../../data/labels_classes_priors/dcan/FreeSurferColorLUT.txt'
     label_lst = \
         get_label_list(os.path.join('/home/miran045/reine097/projects/SynthSeg/data/labels_classes_priors/dcan',

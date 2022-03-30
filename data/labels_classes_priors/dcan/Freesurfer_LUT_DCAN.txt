@@ -1,4 +1,5 @@
 # FSL labels required for infant pipeline:
+labels    structures
 2   Left-Cerebral-White-Matter              245 245 245 0 (**NOTE: depending on which JLF templates are used, this label may be replace by separate labels for myelinated and unmyelinated WM**)
 3   Left-Cerebral-Cortex                    205 62  78  0
 4   Left-Lateral-Ventricle                  120 18  134 0
@@ -28,12 +29,7 @@
 58  Right-Accumbens-area                    255 165 0   0
 60  Right-VentralDC                         165 42  42  0
 172 Vermis                                  119 100 176 0
-
-#Labels specific to infants:
-#Label 2 from above (left WM) is reassigned to labels 159 & 161
-#Label 41 (right WM) is reassigned to labels 160 & 162
-
-159 Left-Cerebral-WM-unmyelinated           
+159 Left-Cerebral-WM-unmyelinated
 160 Right-Cerebral-WM-unmyelinated   
 161 Left-Cerebral-WM-myelinated            
-162 Right-Cerebral-WM-myelinated           
+162 Right-Cerebral-WM-myelinated
