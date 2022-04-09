@@ -2,7 +2,7 @@
 sbatch <<EOT
 #!/bin/sh
 
-#SBATCH --time=4:00:00
+#SBATCH --time=16:00:00
 #SBATCH --ntasks=8
 #SBATCH --mem=10g
 #SBATCH --tmp=10g
