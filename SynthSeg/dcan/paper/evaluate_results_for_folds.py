@@ -23,11 +23,11 @@ def evaluate_results(result_dir, inferred_folder, labels_file_path, gt_root_dir)
 
 
 if __name__ == "__main__":
-    inferred_dir = sys.argv[1]
-    results_dir = sys.argv[2]
+    gt_root_folder = sys.argv[1]
+    inferred_dir = sys.argv[2]
+    results_dir = sys.argv[3]
     dcan_folder = '/home/miran045/reine097/projects/SynthSeg/data/labels_classes_priors/dcan/'
     nnunet_dir = '/home/feczk001/shared/data/nnUNet/'
-    gt_root_folder = os.path.join(nnunet_dir, 'raw_data/Task516_525/gt_labels/')
     mapping_file = os.path.join(dcan_folder, 'Freesurfer_LUT_DCAN.txt')
     evaluate_results(results_dir, inferred_dir, mapping_file, gt_root_folder)
     measures = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
