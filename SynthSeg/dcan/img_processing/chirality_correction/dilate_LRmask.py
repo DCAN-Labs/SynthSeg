@@ -8,7 +8,8 @@ from nipype.interfaces import fsl
 subject_dir = '/home/exacloud/gscratch/InspireLab/projects/INFANT/ECHO_processing/code/Luci/dil_LR_mask/test_data'
 os.chdir(subject_dir)
 
-def dilateLRmask():
+
+def dilate_lr_mask():
     if not os.path.exists('wd'):
         os.mkdir('wd')
 
@@ -26,7 +27,8 @@ def dilateLRmask():
                            out_file='wd/Mmask.nii.gz')
     maths.run()
 
-    # dilate, fill, and erode each mask in order to get rid of holes (also binarize L and M images in order to perform binary operations)
+    # dilate, fill, and erode each mask in order to get rid of holes (also binarize L and M images in order to perform
+    # binary operations)
     anatfile = 'wd/Lmask.nii.gz'
     maths = fsl.ImageMaths(in_file=anatfile, op_string='-dilM -dilM -dilM -fillh -ero',
                            out_file='wd/L_mask_holes_filled.nii.gz')
@@ -65,19 +67,20 @@ def dilateLRmask():
                            out_file='wd/dilated_LRmask.nii.gz')
     maths.run()
 
+
 def fix_overlap_values():
-    orig_LRmask_img = nib.load('LRmask.nii.gz')
-    orig_LRmask_data = orig_LRmask_img.get_fdata()
+    orig_lr_mask_img = nib.load('LRmask.nii.gz')
+    orig_LRmask_data = orig_lr_mask_img.get_fdata()
 
     fill_LRmask_img = nib.load('wd/dilated_LRmask.nii.gz')
     fill_LRmask_data = fill_LRmask_img.get_fdata()
 
     # Flatten numpy arrays
     orig_LRmask_data_2D = orig_LRmask_data.reshape((182, 39676), order='C')
-    orig_LRmask_data_1D = orig_LRmask_data_2D.reshape((7221032), order='C')
+    orig_LRmask_data_1D = orig_LRmask_data_2D.reshape(7221032, order='C')
 
     fill_LRmask_data_2D = fill_LRmask_data.reshape((182, 39676), order='C')
-    fill_LRmask_data_1D = fill_LRmask_data_2D.reshape((7221032), order='C')
+    fill_LRmask_data_1D = fill_LRmask_data_2D.reshape(7221032, order='C')
 
     # grab index values of voxels with a value greater than 2.0 in filled L/R mask
     voxel_check = np.where(fill_LRmask_data_1D > 2.0)
@@ -92,11 +95,11 @@ def fix_overlap_values():
 
     # save new numpy array as image
     empty_header = nib.Nifti1Header()
-    out_img = nib.Nifti1Image(fill_LRmask_data_3D, orig_LRmask_img.affine, empty_header)
+    out_img = nib.Nifti1Image(fill_LRmask_data_3D, orig_lr_mask_img.affine, empty_header)
     nib.save(out_img, 'LRmask_dil.nii.gz')
 
+
 if __name__ == '__main__':
-    dilateLRmask()
+    dilate_lr_mask()
     fix_overlap_values()
     shutil.rmtree('wd')
-
