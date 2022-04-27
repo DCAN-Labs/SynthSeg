@@ -13,12 +13,7 @@ import scipy.ndimage.interpolation
 from PIL import Image
 import matplotlib.pyplot as plt
 
-# note sure if tqdm_notebook reverts back to 
-try:
-    get_ipython
-    from tqdm import tqdm_notebook as tqdm
-except:
-    from tqdm import tqdm as tqdm
+from tqdm import tqdm as tqdm
 
 # import local ndutils
 import ext.pynd.ndutils as nd
