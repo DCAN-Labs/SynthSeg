@@ -1,15 +1,30 @@
+#!/usr/bin/env python
+
+"""
+This script uses the LR mask to correct the chirality of segmentations generated with nnUNet. The final aseg will be output to:
+/home/exacloud/gscratch/InspireLab/data/HCP/processed/ECHO/pipeline_inputs/nnunet/asegs_cc
+
+Arguments:
+    sub_LRmask_dir: location of directory that contains the LRmask.nii.gz file generated for a subject
+
+Usage:
+  dilate_lr_mask  <sub_LRmask_dir>
+  dilate_lr_mask -h | --help
+Options:
+  -h --help     Show this screen.
+"""
+
 import os
 import shutil
 import nibabel as nib
 import numpy as np
+from docopt import docopt
 
 from nipype.interfaces import fsl
 
-subject_dir = '/home/exacloud/gscratch/InspireLab/projects/INFANT/ECHO_processing/code/Luci/dil_LR_mask/test_data'
-os.chdir(subject_dir)
 
-
-def dilate_lr_mask():
+def dilate_lr_mask(sub_LRmask_dir):
+    os.chdir(sub_LRmask_dir)
     if not os.path.exists('wd'):
         os.mkdir('wd')
 
@@ -27,8 +42,8 @@ def dilate_lr_mask():
                            out_file='wd/Mmask.nii.gz')
     maths.run()
 
-    # dilate, fill, and erode each mask in order to get rid of holes (also binarize L and M images in order to perform
-    # binary operations)
+    # dilate, fill, and erode each mask in order to get rid of holes
+    # (also binarize L and M images in order to perform binary operations)
     anatfile = 'wd/Lmask.nii.gz'
     maths = fsl.ImageMaths(in_file=anatfile, op_string='-dilM -dilM -dilM -fillh -ero',
                            out_file='wd/L_mask_holes_filled.nii.gz')
@@ -44,7 +59,7 @@ def dilate_lr_mask():
                            out_file='wd/M_mask_holes_filled.nii.gz')
     maths.run()
 
-    # Reassign values of 2 and 3 to R and middle masks
+    # Reassign values of 2 and 3 to R and M masks (L mask already a value of 1)
     anatfile = 'wd/R_mask_holes_filled.nii.gz'
     maths = fsl.ImageMaths(in_file=anatfile, op_string='-mul 2',
                            out_file='wd/R_mask_holes_filled_label2.nii.gz')
@@ -55,7 +70,7 @@ def dilate_lr_mask():
                            out_file='wd/M_mask_holes_filled_label3.nii.gz')
     maths.run()
 
-    # recombine new L and R mask files
+    # recombine new L, R, and M mask files
     anatfile_left = 'wd/L_mask_holes_filled.nii.gz'
     anatfile_right = 'wd/R_mask_holes_filled_label2.nii.gz'
     anatfile_mid = 'wd/M_mask_holes_filled_label3.nii.gz'
@@ -67,10 +82,9 @@ def dilate_lr_mask():
                            out_file='wd/dilated_LRmask.nii.gz')
     maths.run()
 
-
-def fix_overlap_values():
-    orig_lr_mask_img = nib.load('LRmask.nii.gz')
-    orig_LRmask_data = orig_lr_mask_img.get_fdata()
+    ## Fix incorrect values resulting from recombining dilated components
+    orig_LRmask_img = nib.load('LRmask.nii.gz')
+    orig_LRmask_data = orig_LRmask_img.get_fdata()
 
     fill_LRmask_img = nib.load('wd/dilated_LRmask.nii.gz')
     fill_LRmask_data = fill_LRmask_img.get_fdata()
@@ -95,11 +109,12 @@ def fix_overlap_values():
 
     # save new numpy array as image
     empty_header = nib.Nifti1Header()
-    out_img = nib.Nifti1Image(fill_LRmask_data_3D, orig_lr_mask_img.affine, empty_header)
+    out_img = nib.Nifti1Image(fill_LRmask_data_3D, orig_LRmask_img.affine, empty_header)
     nib.save(out_img, 'LRmask_dil.nii.gz')
 
+    #remove working directory with intermediate outputs
+    shutil.rmtree('wd')
 
 if __name__ == '__main__':
-    dilate_lr_mask()
-    fix_overlap_values()
-    shutil.rmtree('wd')
+    args = docopt(__doc__)
+    dilate_lr_mask(args['<sub_LRmask_dir>'])
