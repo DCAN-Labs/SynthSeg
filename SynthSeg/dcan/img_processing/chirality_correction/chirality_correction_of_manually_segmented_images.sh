@@ -2,7 +2,8 @@
 sbatch <<EOT
 #!/bin/sh
 
-#SBATCH --time=16:00:00
+#SBATCH --job-name=chirality_correction_of_manually_segmented_images
+#SBATCH --time=24:00:00
 #SBATCH --ntasks=8
 #SBATCH --mem=10g
 #SBATCH --tmp=10g
@@ -13,6 +14,8 @@ sbatch <<EOT
 
 cd /home/miran045/reine097/projects/SynthSeg/SynthSeg/dcan/img_processing/chirality_correction/ || exit
 export PYTHONPATH="${PYTHONPATH}:/home/miran045/reine097/projects/SynthSeg"
-/home/faird/shared/code/external/envs/miniconda3/mini3/envs/SynthSeg/bin/python \
-	/home/miran045/reine097/projects/SynthSeg/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_of_manually_segmented_images.py
+module load python3
+module load fsl
+module load ants
+/home/miran045/reine097/projects/SynthSeg/venv/bin/python /home/miran045/reine097/projects/SynthSeg/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_of_manually_segmented_images.py $1
 EOT

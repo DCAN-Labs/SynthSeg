@@ -3,8 +3,7 @@ import os
 from os.path import exists
 import sys
 
-from SynthSeg.dcan.img_processing.chirality_correction.left_right_registration_correction import \
-    left_right_registration_correction
+from SynthSeg.dcan.img_processing.chirality_correction.left_right_registration_correction import left_right_registration_correction
 
 
 def correct_chirality(filename, l_r_mask, nifti_input_file_pth, nifti_output_folder, output_mask_fl, sbjct_hd,

@@ -1,5 +1,6 @@
 import subprocess
 
+from SynthSeg.dcan.img_processing.chirality_correction.dilate_LRmask import dilate_lr_mask
 from SynthSeg.dcan.img_processing.correct_chirality import correct_chirality
 
 
@@ -22,6 +23,9 @@ def left_right_registration_correction(
     return_code = process.returncode
     print(return_code)
     if return_code == 0:
+        command = f'dilate_lr_mask({output_mask_file}, {left_right_mask})'
+        print(f"Command: {command}")
+        dilate_lr_mask(output_mask_file, left_right_mask)
         # 2. correct_chirality.py
         correct_chirality(nifti_input_file_path, segment_lookup_table, left_right_mask, nifti_output_file_path)
     else:

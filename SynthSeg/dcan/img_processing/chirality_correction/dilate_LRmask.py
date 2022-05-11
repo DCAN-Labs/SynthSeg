@@ -23,6 +23,7 @@ from docopt import docopt
 from nipype.interfaces import fsl
 
 def dilate_lr_mask(input_LRmask, output_dilated_LRmask):
+    print(f'Entering dilate_lr_mask({input_LRmask}, {output_dilated_LRmask})')
     root=os.path.dirname(input_LRmask)
     td = tempfile.mkdtemp(prefix='{}/'.format(root))
 
@@ -114,6 +115,7 @@ def dilate_lr_mask(input_LRmask, output_dilated_LRmask):
 
     #remove working directory with intermediate outputs
     shutil.rmtree(td)
+    print(f'Exiting dilate_lr_mask({input_LRmask}, {output_dilated_LRmask})')
 
 if __name__ == '__main__':
     args = docopt(__doc__)

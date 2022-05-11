@@ -1,10 +1,11 @@
 import glob
 import os
+import sys
 
 from SynthSeg.dcan.img_processing.chirality_correction.chirality_correction_for_folder import correct_chirality
 
 
-def correct_chirality_for_fold(fold):
+def correct_chirality_for_fold(fold, output_folder):
     nnunet_folder = '/home/feczk001/shared/data/nnUNet/'
     paper_cross_validation_folder = 'segmentations/inferred/PaperCrossValidation/'
     tasks_pth = os.path.join(nnunet_folder, 'raw_data/Task516_525')
@@ -21,7 +22,7 @@ def correct_chirality_for_fold(fold):
         # the purpose here is to take the left right mask from the template and project it onto the native subject --
         # and then the chirality correction will use the subject-aligned left right mask to perform the correction
         # the aseg_mask is neither, its just a binary mask of the brain
-        nifti_output_folder = os.path.join(tasks_pth, 'gt_labels_chirality_corrected', f'Fold{str(fold)}')
+        nifti_output_folder = os.path.join(tasks_pth, output_folder, f'Fold{str(fold)}')
         if not os.path.exists(nifti_output_folder):
             os.makedirs(nifti_output_folder)
         correct_chirality(filename, l_r_mask, nifti_input_file_pth, nifti_output_folder, output_mask_fl, sbjct_hd,
@@ -33,24 +34,22 @@ def get_paths(fold, nifti_input_file_pth, nnunet_folder, paper_cross_validation_
     age_in_months = int(filename[0])
     nifti_file_extension = '.nii.gz'
     file_base_name = filename[:-len(nifti_file_extension)]
-    if age_in_months == 0:
-        age_in_months = 1
     sbjct_hd = \
         os.path.join(
             nnunet_folder,
             f'nnUNet_raw_data_base/nnUNet_raw_data/Task{str(516 + fold)}_Paper_Fold{str(fold)}/imagesTs',
             f'{file_base_name}_0001{nifti_file_extension}')
-    tmplt_hd = \
-        os.path.join(
-            nnunet_folder,
-            paper_cross_validation_folder, 'orig_chircorr_templates',
-            f'{str(age_in_months)}mo_T2w_acpc_dc_restore.nii.gz')
+    tmplt_hd_dir = '/home/miran045/reine097/projects/SynthSeg/data/orig_chircorr_templates'
+    if age_in_months != 0:
+        tmplt_hd = os.path.join(tmplt_hd_dir, f'{str(age_in_months)}mo_T2w_acpc_dc_restore.nii.gz')
+    else:
+        tmplt_hd = os.path.join(tmplt_hd_dir, '1mo_T2w_brain.nii.gz')
     # both the input and output masks should be left right
-    l_r_mask = \
-        os.path.join(
-            nnunet_folder,
-            paper_cross_validation_folder, 'orig_chircorr_templates',
-            f'{str(age_in_months)}mo_template_LRmask.nii.gz')
+    orig_chircorr_templates = os.path.join(nnunet_folder, paper_cross_validation_folder, 'orig_chircorr_templates')
+    if age_in_months != 0:
+        l_r_mask = os.path.join(orig_chircorr_templates, f'{str(age_in_months)}mo_template_LRmask.nii.gz')
+    else:
+        l_r_mask = os.path.join(orig_chircorr_templates, '1mo_template_LRmask.nii.gz')
     output_mask_fl = os.path.join(
         nnunet_folder,
         paper_cross_validation_folder, 'LR_masks', f'{file_base_name}_LRmask{nifti_file_extension}')
@@ -59,4 +58,4 @@ def get_paths(fold, nifti_input_file_pth, nnunet_folder, paper_cross_validation_
 
 if __name__ == '__main__':
     for fld in range(10):
-        correct_chirality_for_fold(fld)
+        correct_chirality_for_fold(fld, sys.argv[1])
