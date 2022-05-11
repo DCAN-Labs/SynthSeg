@@ -16,24 +16,22 @@ TemplateMask=$1;shift
 OutputMaskFile=$1;shift
 
 module load ants
-WD="./wd"
-if [ ! -d "$WD" ]; then
-	mkdir "$WD"
-fi
+
+tmp_dir=$(mktemp -d -t ci-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
+echo $tmp_dir
 
 echo "SubjectHead:  $SubjectHead"
 echo "TemplateHead: $TemplateHead"
-echo "WD:           $WD"
+echo "WD:           $tmp_dir"
 # Register the template head to the subject head
-ANTS 3 -m CC["$SubjectHead","$TemplateHead",1,5] -t SyN[0.25] -r Gauss[3,0] -o "$WD"/antsreg -i 60x50x20 --use-Histogram-Matching  --number-of-affine-iterations 10000x10000x10000x10000x10000 --MI-option 32x16000
+ANTS 3 -m CC["$SubjectHead","$TemplateHead",1,5] -t SyN[0.25] -r Gauss[3,0] -o "$tmp_dir"/antsreg -i 60x50x20 --use-Histogram-Matching  --number-of-affine-iterations 10000x10000x10000x10000x10000 --MI-option 32x16000
 
 # Apply resulting transformation to template L/R mask to generate subject L/R mask
 antsApplyTransforms -d 3 \
         --output "$OutputMaskFile" \
         --reference-image "$SubjectHead" \
-        --transform "$WD"/antsregWarp.nii.gz "$WD"/antsregAffine.txt \
+        --transform "$tmp_dir"/antsregWarp.nii.gz "$tmp_dir"/antsregAffine.txt \
         --input "$TemplateMask" \
 	--interpolation NearestNeighbor
 
-#delete wd
-rm -r "$WD"
+rm -rf $tmp_dir

@@ -20,6 +20,7 @@ def left_right_registration_correction(
             subject_head, template_head, left_right_mask, output_mask_file)
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
     process.wait()
+    (stdout, stderr) = process.communicate()
     return_code = process.returncode
     print(return_code)
     if return_code == 0:
@@ -31,3 +32,4 @@ def left_right_registration_correction(
     else:
         msg = 'Error occurred during call to LR_mask_registration.'
         print(msg)
+        print(stderr)
