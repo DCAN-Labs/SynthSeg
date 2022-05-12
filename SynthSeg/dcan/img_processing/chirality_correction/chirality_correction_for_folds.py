@@ -10,7 +10,7 @@ from SynthSeg.dcan.img_processing.chirality_correction.chirality_correction_of_m
 def correct_chirality_for_fold(input_folder, output_folder, fold):
     nnunet_folder = '/home/feczk001/shared/data/nnUNet/'
     paper_cross_validation_folder = 'segmentations/inferred/PaperCrossValidation/'
-    nifti_input_folder_pth = os.path.join(input_folder, f'Fold{str(fold)}')
+    nifti_input_folder_pth = os.path.join(input_folder, f'Task{516 + fold}_Paper_Fold{str(fold)}')
     data_dir = 'data'
     segment_lookup_tbl = \
         os.path.join('/home/miran045/reine097/projects/SynthSeg', data_dir,
