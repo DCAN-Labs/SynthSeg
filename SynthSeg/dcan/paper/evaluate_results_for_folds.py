@@ -13,7 +13,7 @@ def evaluate_results(result_dir, inferred_folder, labels_file_path, gt_root_dir)
     label_list = get_all_dcan_labels(labels_file_path)
     for fold_i in range(10):
         gt_dir = os.path.join(gt_root_dir, f'Fold{fold_i}/')
-        seg_dir = os.path.join(inferred_folder, f'Task{516 + fold_i}_Paper_Fold{fold_i}/')
+        seg_dir = os.path.join(inferred_folder, f'Fold{fold_i}/')
         assert os.path.exists(seg_dir)
         dir_list = os.listdir(seg_dir)
         # Ensure contains more than just plans.pkl file.
