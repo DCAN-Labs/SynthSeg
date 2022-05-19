@@ -25,8 +25,9 @@ from nipype.interfaces import fsl
 def dilate_lr_mask(input_LRmask, output_dilated_LRmask):
     print(f'Entering dilate_lr_mask({input_LRmask}, {output_dilated_LRmask})')
     root=os.path.dirname(input_LRmask)
-    td = tempfile.mkdtemp(prefix='{}/'.format(root))
+    td = tempfile.mkdtemp(prefix='dilate_lr_mask')
 
+    wd = os.getcwd()
     os.chdir(td)
 
     anatfile = input_LRmask
@@ -112,6 +113,8 @@ def dilate_lr_mask(input_LRmask, output_dilated_LRmask):
     empty_header = nib.Nifti1Header()
     out_img = nib.Nifti1Image(fill_LRmask_data_3D, orig_LRmask_img.affine, empty_header)
     nib.save(out_img, output_dilated_LRmask)
+
+    os.chdir(wd)
 
     #remove working directory with intermediate outputs
     shutil.rmtree(td)

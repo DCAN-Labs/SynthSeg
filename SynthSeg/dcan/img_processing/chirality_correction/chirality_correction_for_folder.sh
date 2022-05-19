@@ -14,7 +14,7 @@ sbatch <<EOT
 
 cd /home/miran045/reine097/projects/SynthSeg/SynthSeg/dcan/img_processing/chirality_correction/ || exit
 export PYTHONPATH="${PYTHONPATH}:/home/miran045/reine097/projects/SynthSeg"
-load module fsl
-/home/faird/shared/code/external/envs/miniconda3/mini3/envs/SynthSeg/bin/python \
+module load fsl
+~/projects/SynthSeg/venv/bin/python \
 	/home/miran045/reine097/projects/SynthSeg/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_folder.py $1 $2 $3
 EOT

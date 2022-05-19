@@ -24,7 +24,7 @@ def correct_chirality(filename, l_r_mask, nifti_input_file_pth, nifti_output_fol
 
 
 def correct_chirality_for_folder(nifti_input_folder_pth, images_ts_folder, nifti_output_folder):
-    data_folder = '../../../../data'
+    data_folder = '/home/miran045/reine097/projects/SynthSeg/data'
     segment_lookup_tbl = os.path.join(data_folder, 'labels_classes_priors/dcan/FreeSurferColorLUT.txt')
     nifti_input_file_pths = glob.glob(f"{nifti_input_folder_pth}/*.nii.gz")
     for nifti_input_file_pth in nifti_input_file_pths:
