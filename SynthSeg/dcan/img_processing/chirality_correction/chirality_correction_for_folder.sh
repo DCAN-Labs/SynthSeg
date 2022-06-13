@@ -3,7 +3,7 @@ sbatch <<EOT
 #!/bin/sh
 
 #SBATCH --job-name=chirality_correction_for_folder
-#SBATCH --time=2:00:00
+#SBATCH --time=24:00:00
 #SBATCH --ntasks=8
 #SBATCH --mem=10g
 #SBATCH --tmp=10g
