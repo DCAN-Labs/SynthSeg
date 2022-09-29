@@ -18,4 +18,12 @@ def estimate_intensities(image_dir, labels_dir, estimation_labels, result_dir):
 
 
 if __name__ == "__main__":
-    estimate_intensities(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    estimation_labels_file = sys.argv[3]
+
+    file1 = open(estimation_labels_file, 'r')
+    lines = file1.readlines()
+    labels = []
+    for line in lines:
+        label = int(line.strip())
+        labels.append(label)
+    estimate_intensities(sys.argv[1], sys.argv[2], labels, sys.argv[4])
