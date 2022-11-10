@@ -1,7 +1,7 @@
 import subprocess
 
-from SynthSeg.dcan.img_processing.chirality_correction.dilate_LRmask import dilate_lr_mask
-from SynthSeg.dcan.img_processing.correct_chirality import correct_chirality
+from dcan.img_processing.chirality_correction.correct_chirality import correct_chirality
+from dcan.img_processing.chirality_correction.dilate_LRmask import dilate_lr_mask
 
 
 def left_right_registration_correction(

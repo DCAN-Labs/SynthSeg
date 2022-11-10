@@ -1,7 +1,7 @@
 import nibabel as nib
 
-from SynthSeg.dcan.img_processing import chirality_constants
-from SynthSeg.dcan.look_up_tables import get_id_to_region_mapping
+from dcan.img_processing import chirality_constants
+from dcan.look_up_tables import get_id_to_region_mapping
 
 RIGHT = 'Right-'
 LEFT = 'Left-'

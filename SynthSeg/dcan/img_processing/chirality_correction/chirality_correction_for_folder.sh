@@ -13,7 +13,7 @@ sbatch <<EOT
 #SBATCH -o chirality_correction_for_folder-%j.out
 
 cd /home/miran045/reine097/projects/SynthSeg/SynthSeg/dcan/img_processing/chirality_correction/ || exit
-export PYTHONPATH="${PYTHONPATH}:/home/miran045/reine097/projects/SynthSeg"
+export PYTHONPATH="${PYTHONPATH}:/home/miran045/reine097/projects/SynthSeg/SynthSeg"
 module load fsl
 ~/projects/SynthSeg/venv/bin/python \
 	/home/miran045/reine097/projects/SynthSeg/SynthSeg/dcan/img_processing/chirality_correction/chirality_correction_for_folder.py $1 $2 $3
