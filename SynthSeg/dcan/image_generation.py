@@ -14,7 +14,7 @@ def path_leaf(path):
     return tail or ntpath.basename(head)
 
 
-def generate_images(path_label_map, priors_folder, result_dir, n_examples, downsample):
+def generate_images(path_label_map, priors_folder, result_dir, n_examples, downsample, age_in_months):
     """This program generates synthetic T1-weighted or T2-weighted brain MRI scans from a label map.  Specifically, it
     allows you to impose prior distributions on the GMM parameters, so that you can can generate images of desired
     intensity distribution.  You can generate images of desired contrast by imposing specified prior distributions from
@@ -56,21 +56,29 @@ def generate_images(path_label_map, priors_folder, result_dir, n_examples, downs
 
     # create result dir
     utils.mkdir(result_dir)
-
+    beginning_time = time.time()
     for n in range(n_examples):
         # generate new image and corresponding labels
         start = time.time()
         im, lab = brain_generator.generate_brain()
         t1_im = im[:, :, :, 0]
         t2_im = im[:, :, :, 1]
-        end = time.time()
-        print('generation {0:d} took {1:.01f}s'.format(n, end - start))
 
         output_file_name = "SynthSeg_generated_{}".format(f'{n:03}')
         # save output image and label map
+        full_path = os.path.join(result_dir, '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0000'))
+        if os.path.exists(full_path):
+            return
         utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
-                          os.path.join(result_dir, '%s_%s_%s.nii.gz' % (output_file_name, n, '0000')))
+                          full_path)
         utils.save_volume(t2_im, brain_generator.aff, brain_generator.header,
-                          os.path.join(result_dir, '%s_%s_%s.nii.gz' % (output_file_name, n, '0001')))
+                          os.path.join(
+                              result_dir, '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0001')))
         utils.save_volume(lab, brain_generator.aff, brain_generator.header,
-                          os.path.join(result_dir, '%s_%s.nii.gz' % (output_file_name, n)))
+                          os.path.join(result_dir, '%dmo_%s.nii.gz' % (age_in_months, output_file_name)))
+
+        end = time.time()
+        cumulative_time = end - beginning_time
+        time_remaining = (n_examples - n) * cumulative_time / (n + 1)
+        print(f'age: {age_in_months}; generation {n} (of {n_examples}) took {int(end - start)} seconds')
+        print(f'{int(time_remaining / 60)} minutes remaining.')
