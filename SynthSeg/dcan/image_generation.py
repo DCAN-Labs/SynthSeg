@@ -58,17 +58,17 @@ def generate_images(path_label_map, priors_folder, result_dir, n_examples, downs
     utils.mkdir(result_dir)
     beginning_time = time.time()
     for n in range(n_examples):
+        output_file_name = "SynthSeg_generated_{}".format(f'{n:04}')
+        # save output image and label map
+        full_path = os.path.join(result_dir, '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0000'))
+        if os.path.exists(full_path):
+            continue
         # generate new image and corresponding labels
         start = time.time()
         im, lab = brain_generator.generate_brain()
         t1_im = im[:, :, :, 0]
         t2_im = im[:, :, :, 1]
 
-        output_file_name = "SynthSeg_generated_{}".format(f'{n:03}')
-        # save output image and label map
-        full_path = os.path.join(result_dir, '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0000'))
-        if os.path.exists(full_path):
-            return
         utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
                           full_path)
         utils.save_volume(t2_im, brain_generator.aff, brain_generator.header,

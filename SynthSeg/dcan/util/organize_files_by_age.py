@@ -1,9 +1,7 @@
-import os.path
-from os import listdir
-from os.path import isfile, join
 import os
 import shutil
-
+from os import listdir
+from os.path import isfile, join
 
 base_dir = '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task550/'
 for age in range(9):
@@ -20,7 +18,4 @@ for folder in ['labels', 'T1w', 'T2w']:
         dest_age_dir = f[:3]
         dest_dir = os.path.join(base_dir, dest_age_dir, folder)
         source_file = join(src_dir, f)
-        print(source_file)
-        print(dest_dir)
-        print()
         shutil.move(source_file, dest_dir)

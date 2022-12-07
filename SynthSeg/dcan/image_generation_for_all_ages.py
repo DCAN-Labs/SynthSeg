@@ -14,7 +14,7 @@ for age in range(9):
         os.makedirs(output_folder)
     input_folder = os.path.join(task_550_folder, month_str, 'labels')
     priors_folder = os.path.join('./data/labels_classes_priors/dcan', month_str)
-    image_count = 12
+    image_count = int(10000 / 9)
     downsample = False
 
     generate_images_from_folder(input_folder, output_folder, priors_folder, image_count, downsample, age)
