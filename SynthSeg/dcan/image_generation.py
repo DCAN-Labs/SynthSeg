@@ -14,7 +14,9 @@ def path_leaf(path):
     return tail or ntpath.basename(head)
 
 
-def generate_images(path_label_map, priors_folder, result_dir, n_examples, downsample, age_in_months):
+def generate_images(
+        path_label_map, priors_folder, result_dir, n_examples, downsample, age_in_months, prior_distribution='uniform',
+        prior_means=None, prior_stds=None):
     """This program generates synthetic T1-weighted or T2-weighted brain MRI scans from a label map.  Specifically, it
     allows you to impose prior distributions on the GMM parameters, so that you can can generate images of desired
     intensity distribution.  You can generate images of desired contrast by imposing specified prior distributions from
@@ -39,7 +41,8 @@ def generate_images(path_label_map, priors_folder, result_dir, n_examples, downs
 
     generation_classes = get_generation_classes()
 
-    prior_distribution, prior_means, prior_stds = get_priors(priors_folder)
+    if not prior_distribution:
+        prior_distribution, prior_means, prior_stds = get_priors(priors_folder)
 
     # instantiate BrainGenerator object
     brain_generator = BrainGenerator(labels_dir=path_label_map,

@@ -10,5 +10,5 @@ for root, dirs, files in os.walk("."):
     for file in files:
         print(len(path) * '---', file)
         src = os.path.join(*path, file)
-        dest = '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task550/'
+        dest = '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task550_flat/'
         shutil.move(src, dest)

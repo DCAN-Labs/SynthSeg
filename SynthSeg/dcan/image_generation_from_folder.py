@@ -5,8 +5,10 @@ from os.path import isfile, join
 from SynthSeg.dcan.image_generation import generate_images
 
 
-def generate_images_from_folder(input_folder, output_folder, priors_folder, image_count, downsample, age_in_months):
-    generate_images(input_folder, priors_folder, output_folder, image_count, downsample, age_in_months)
+def generate_images_from_folder(input_folder, output_folder, priors_folder, image_count, downsample, age_in_months,
+                                prior_distribution='uniform', prior_means=None, prior_stds=None):
+    generate_images(input_folder, priors_folder, output_folder, image_count, downsample, age_in_months,
+                                prior_distribution, prior_means, prior_stds)
 
 
 if __name__ == "__main__":
