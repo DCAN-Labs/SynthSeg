@@ -1,6 +1,7 @@
 import os
 import time
 import ntpath
+import json
 
 import numpy as np
 
@@ -12,6 +13,39 @@ from SynthSeg.dcan.segmentation_common import get_generation_labels, get_priors,
 def path_leaf(path):
     head, tail = ntpath.split(path)
     return tail or ntpath.basename(head)
+
+
+def get_uniform_prior_means(age_in_months):
+    max_min_file = './data/labels_classes_priors/dcan/uniform/min_max_dict.json'
+    f = open(max_min_file)
+    data = json.load(f)
+    age_in_months_str = str(age_in_months)
+    if age_in_months_str in data:
+        month_data = data[age_in_months_str]
+        t1w_min, t1w_max = get_contrast_min_max(month_data, 'T1w')
+        t2w_min, t2w_max = get_contrast_min_max(month_data, 'T2w')
+        uniform_prior_means = [min(t1w_min, t2w_min), max(t1w_max, t2w_max)]
+    else:
+        uniform_prior_means = None
+    f.close()
+
+    return uniform_prior_means
+
+
+def get_contrast_min_max(month_data, contrast):
+    contrast_data = month_data[contrast]
+    if not contrast_data:
+        return [0, 255]
+    contrast_min = 255
+    contrast_max = 0
+    for k in contrast_data:
+        min_max = contrast_data[k]
+        if min_max[0] < contrast_min:
+            contrast_min = max(0, int(min_max[0]))
+        if min_max[1] > contrast_max:
+            contrast_max = min(255, int(min_max[1]))
+
+    return contrast_min, contrast_max
 
 
 def generate_images(
@@ -43,6 +77,8 @@ def generate_images(
 
     if not prior_distribution:
         prior_distribution, prior_means, prior_stds = get_priors(priors_folder)
+    elif prior_distribution == 'uniform':
+        prior_means = get_uniform_prior_means(age_in_months)
 
     # instantiate BrainGenerator object
     brain_generator = BrainGenerator(labels_dir=path_label_map,
@@ -57,13 +93,14 @@ def generate_images(
                                      use_specific_stats_for_channel=True,
                                      downsample=downsample)
 
-    # create result dir
-    utils.mkdir(result_dir)
+    result_dir_exists = os.path.isdir(result_dir)
+    if not result_dir_exists:
+        os.makedirs(result_dir)
     beginning_time = time.time()
     for n in range(n_examples):
         output_file_name = "SynthSeg_generated_{}".format(f'{n:04}')
         # save output image and label map
-        full_path = os.path.join(result_dir, '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0000'))
+        full_path = os.path.join(result_dir, '%dmo_%s.nii.gz' % (age_in_months, output_file_name))
         if os.path.exists(full_path):
             continue
         # generate new image and corresponding labels
@@ -73,12 +110,13 @@ def generate_images(
         t2_im = im[:, :, :, 1]
 
         utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
-                          full_path)
+                          os.path.join(
+                              result_dir, 'images', '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0000')))
         utils.save_volume(t2_im, brain_generator.aff, brain_generator.header,
                           os.path.join(
-                              result_dir, '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0001')))
+                              result_dir, 'images', '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0001')))
         utils.save_volume(lab, brain_generator.aff, brain_generator.header,
-                          os.path.join(result_dir, '%dmo_%s.nii.gz' % (age_in_months, output_file_name)))
+                          os.path.join(result_dir, 'labels', '%dmo_%s.nii.gz' % (age_in_months, output_file_name)))
 
         end = time.time()
         cumulative_time = end - beginning_time

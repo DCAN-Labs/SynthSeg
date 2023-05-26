@@ -1,0 +1,63 @@
+import os.path
+from os import listdir
+from os.path import isfile, join
+
+import nibabel as nib
+import numpy as np
+
+
+def estimate_intensities_by_age():
+    estimation_labels_file = '/home/miran045/reine097/projects/SynthSeg/data/labels_classes_priors/dcan/labels.txt'
+    file1 = open(estimation_labels_file, 'r')
+    lines = file1.readlines()
+    labels = []
+    for line in lines:
+        label = int(line.strip())
+        labels.append(label)
+
+    a = np.array([255, 0])
+    mins_and_maxes = np.tile(a, [9, 2, len(labels), 1])
+
+    task_dir = \
+        '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task552_uniform_distribution_synthseg'
+    labels_dir = os.path.join(task_dir, 'labels')
+    images_dir = os.path.join(task_dir, 'images')
+    label_files = [f for f in listdir(labels_dir) if isfile(join(labels_dir, f))]
+    for label_file in label_files:
+        label_img = nib.load(join(labels_dir, label_file))
+        label_data = label_img.get_fdata()
+        t1_file = f'{label_file[:-7]}_0000.nii.gz'
+        t1_file_path = os.path.join(images_dir, t1_file)
+        t1_img = nib.load(t1_file_path)
+        t1_data = t1_img.get_fdata()
+        t2_file = f'{label_file[:-7]}_0001.nii.gz'
+        t2_file_path = os.path.join(images_dir, t2_file)
+        t2_img = nib.load(t2_file_path)
+        t2_data = t2_img.get_fdata()
+        data_shape = label_img.header.get_data_shape()
+        for i in range(data_shape[0]):
+            for j in range(data_shape[1]):                                                                                                    
+                for k in range(data_shape[2]):
+                    label = int(label_data[i][j][k])
+                    label_index = labels.index(label)
+                    age = int(label_file[0])
+                    for contrast in range(2):
+                        if contrast == 0:
+                            voxel = int(t1_data[i][j][k])
+                        else:
+                            voxel = int(t2_data[i][j][k])
+                        if voxel < 0:
+                            voxel = 0
+                        elif voxel > 255:
+                            voxel = 255
+                        if voxel < mins_and_maxes[age][contrast][label_index][0]:
+                            mins_and_maxes[age][contrast][label_index][0] = voxel
+                        if voxel > mins_and_maxes[age][contrast][label_index][1]:
+                            mins_and_maxes[age][contrast][label_index][1] = voxel
+    with open('./data/labels_classes_priors/dcan/uniform/mins_maxes.npy', 'wb') as f:
+        # noinspection PyTypeChecker
+        np.save(f, mins_and_maxes)
+
+
+if __name__ == "__main__":
+    estimate_intensities_by_age()
