@@ -16,18 +16,9 @@ def path_leaf(path):
 
 
 def get_uniform_prior_means(age_in_months):
-    max_min_file = './data/labels_classes_priors/dcan/uniform/min_max_dict.json'
-    f = open(max_min_file)
-    data = json.load(f)
-    age_in_months_str = str(age_in_months)
-    if age_in_months_str in data:
-        month_data = data[age_in_months_str]
-        t1w_min, t1w_max = get_contrast_min_max(month_data, 'T1w')
-        t2w_min, t2w_max = get_contrast_min_max(month_data, 'T2w')
-        uniform_prior_means = [min(t1w_min, t2w_min), max(t1w_max, t2w_max)]
-    else:
-        uniform_prior_means = None
-    f.close()
+    max_min_file = './data/labels_classes_priors/dcan/uniform/mins_maxes.npy'
+    data = np.load(max_min_file)
+    uniform_prior_means = data[age_in_months]
 
     return uniform_prior_means
 
@@ -78,7 +69,18 @@ def generate_images(
     if not prior_distribution:
         prior_distribution, prior_means, prior_stds = get_priors(priors_folder)
     elif prior_distribution == 'uniform':
+        # need to give prior_means (the same applies to prior_stds) as a numpy array with K columns (the number of
+        # labels) and 4 rows. The first two rows correspond to the [min, max] of the T1 contrast, and the 3rd and 4th
+        # rows correspond to [min, max] of the T2 contrast.
+
+        # prior_means is the same as I described in my previous email, but here you will need to set n_channels = 2 and
+        # use_spcific_stats_for_channel = True. That will give you an image of size HxWxDx2 where the first channel will
+        # correspond to the 1st and 2nd rows of prior_means, and the 2nd channel will correpsond to the 3rd and 4th rows
+        # of prior_means.
         prior_means = get_uniform_prior_means(age_in_months)
+        t1_prior_means = prior_means[0]
+        t1_prior_means_swapped = np.transpose(t1_prior_means, (1, 0))
+        t2_prior_means = prior_means[1]
 
     # instantiate BrainGenerator object
     brain_generator = BrainGenerator(labels_dir=path_label_map,

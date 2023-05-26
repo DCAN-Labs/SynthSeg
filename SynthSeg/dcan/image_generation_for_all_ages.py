@@ -7,7 +7,7 @@ import sys
 from dcan.image_generation_from_folder import generate_images_from_folder
 
 
-def generate_images_for_all_ages(task_folder, image_count, min_age_in_months,
+def generate_images_for_all_ages(task_folder, image_count, min_age_in_months=0,
                                  prior_distribution='uniform', prior_means=None, prior_stds=None):
     for age in range(min_age_in_months, 9):
         month_str = f'{age}mo'
