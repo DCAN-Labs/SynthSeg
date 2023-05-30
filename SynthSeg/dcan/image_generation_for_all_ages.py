@@ -3,13 +3,14 @@
 # /home/miran045/reine097/projects/SynthSeg/data/labels_classes_priors/dcan 6 [False]
 import os.path
 import sys
+from tqdm import tqdm
 
 from dcan.image_generation_from_folder import generate_images_from_folder
 
 
 def generate_images_for_all_ages(task_folder, image_count, min_age_in_months=0,
                                  prior_distribution='uniform', prior_means=None, prior_stds=None):
-    for age in range(min_age_in_months, 9):
+    for age in tqdm(range(min_age_in_months, 9)):
         month_str = f'{age}mo'
         output_folder = task_folder
         is_exist = output_folder

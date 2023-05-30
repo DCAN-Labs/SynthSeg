@@ -1,7 +1,6 @@
+import ntpath
 import os
 import time
-import ntpath
-import json
 
 import numpy as np
 
@@ -78,9 +77,6 @@ def generate_images(
         # correspond to the 1st and 2nd rows of prior_means, and the 2nd channel will correpsond to the 3rd and 4th rows
         # of prior_means.
         prior_means = get_uniform_prior_means(age_in_months)
-        t1_prior_means = prior_means[0]
-        t1_prior_means_swapped = np.transpose(t1_prior_means, (1, 0))
-        t2_prior_means = prior_means[1]
 
     # instantiate BrainGenerator object
     brain_generator = BrainGenerator(labels_dir=path_label_map,
