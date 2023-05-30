@@ -65,3 +65,7 @@ urllib3==1.25.9
 wcwidth==0.1.9
 Werkzeug==1.0.1
 wrapt==1.12.1
+tensorflow~=2.6.2
+torchio~=0.18.76
+docopt~=0.6.2
+nipype~=1.7.1
