@@ -3,6 +3,7 @@ import os
 import time
 
 import numpy as np
+from tqdm import tqdm
 
 from SynthSeg import utils
 from SynthSeg.brain_generator import BrainGenerator
@@ -94,15 +95,13 @@ def generate_images(
     result_dir_exists = os.path.isdir(result_dir)
     if not result_dir_exists:
         os.makedirs(result_dir)
-    beginning_time = time.time()
-    for n in range(n_examples):
+    for n in tqdm(range(n_examples)):
         output_file_name = "SynthSeg_generated_{}".format(f'{n:04}')
         # save output image and label map
         full_path = os.path.join(result_dir, '%dmo_%s.nii.gz' % (age_in_months, output_file_name))
         if os.path.exists(full_path):
             continue
         # generate new image and corresponding labels
-        start = time.time()
         im, lab = brain_generator.generate_brain()
         t1_im = im[:, :, :, 0]
         t2_im = im[:, :, :, 1]
@@ -115,9 +114,3 @@ def generate_images(
                               result_dir, 'images', '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0001')))
         utils.save_volume(lab, brain_generator.aff, brain_generator.header,
                           os.path.join(result_dir, 'labels', '%dmo_%s.nii.gz' % (age_in_months, output_file_name)))
-
-        end = time.time()
-        cumulative_time = end - beginning_time
-        time_remaining = (n_examples - n) * cumulative_time / (n + 1)
-        print(f'age: {age_in_months}; generation {n} (of {n_examples}) took {int(end - start)} seconds')
-        print(f'{int(time_remaining / 60)} minutes remaining.')
