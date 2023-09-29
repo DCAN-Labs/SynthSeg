@@ -1,37 +1,35 @@
 #!/usr/bin/python
-
+import argparse
 import os
 import shutil
-import sys
+from os import listdir
+from os.path import isfile, join
+
+from tqdm import tqdm
 
 
 def rearrange_files(base_dir):
-    nnunet_dir = '/home/feczk001/shared/data/nnUNet'
-
-    def get_immediate_subdirectories(a_dir):
-        return [name for name in os.listdir(a_dir)
-                if os.path.isdir(os.path.join(a_dir, name))]
-
-    for age_dir in get_immediate_subdirectories(base_dir):
-        print(age_dir)
-        for subject_dir in get_immediate_subdirectories(os.path.join(base_dir, age_dir)):
-            print(f'\t{subject_dir}')
-            task_553_dir = os.path.join(nnunet_dir,
-                                        'nnUNet_raw_data_base/nnUNet_raw_data/Task552_uniform_distribution_synthseg')
-
-            old_file_names = \
-                ['aseg_acpc_final_stage5.nii.gz', f"{subject_dir}_T1w.nii.gz", f"{subject_dir}_T2w.nii.gz"]
-            old_file_paths = [os.path.join(base_dir, age_dir, subject_dir, f) for f in old_file_names]
-            new_file_names = \
-                [f'labels/{age_dir}_{subject_dir}.nii.gz', f'images/{age_dir}_{subject_dir}_0000.nii.gz',
-                 f'images/{age_dir}_{subject_dir}_0001.nii.gz']
-            new_file_paths = [os.path.join(task_553_dir, f) for f in new_file_names]
-
-            for i in range(3):
-                src = old_file_paths[i]
-                dst = new_file_paths[i]
-                shutil.copyfile(src, dst)
+    for age in range(9):
+        age_dir = os.path.join(base_dir, f'{age}mo')
+        only_files = [f for f in listdir(age_dir) if isfile(join(age_dir, f))]
+        for sub_dir_type in ['labels', 'T1w', 'T2w']:
+            sub_dir = os.path.join(age_dir, sub_dir_type)
+            sub_dir_exists = os.path.exists(sub_dir)
+            if not sub_dir_exists:
+                os.makedirs(sub_dir)
+        for file in tqdm(only_files):
+            if file.endswith('_0000.nii.gz'):
+                shutil.move(join(age_dir, file), os.path.join(age_dir, 'T1w', file))
+            elif file.endswith('_0001.nii.gz'):
+                shutil.move(join(age_dir, file), os.path.join(age_dir, 'T2w', file))
+            else:
+                shutil.move(join(age_dir, file), os.path.join(age_dir, 'labels', file))
 
 
 if __name__ == "__main__":
-    rearrange_files(sys.argv[1])
+    parser = argparse.ArgumentParser(
+        prog='RearrangeLabelImageFiles',
+        description='Rearrange files by age and file type')
+    parser.add_argument('base_dir')
+    args = parser.parse_args()
+    rearrange_files(args.base_dir)
