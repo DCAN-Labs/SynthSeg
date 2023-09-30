@@ -1,6 +1,5 @@
 import ntpath
 import os
-import time
 
 import numpy as np
 from tqdm import tqdm
@@ -40,7 +39,7 @@ def get_contrast_min_max(month_data, contrast):
 
 
 def generate_images(
-        path_label_map, priors_folder, result_dir, n_examples, downsample, age_in_months, prior_distribution='uniform',
+        path_label_map, priors_folder, result_dir, n_examples, downsample, age_in_months, prior_distribution='normal',
         prior_means=None, prior_stds=None):
     """This program generates synthetic T1-weighted or T2-weighted brain MRI scans from a label map.  Specifically, it
     allows you to impose prior distributions on the GMM parameters, so that you can can generate images of desired
@@ -66,7 +65,7 @@ def generate_images(
 
     generation_classes = get_generation_classes()
 
-    if not prior_distribution:
+    if prior_distribution == 'normal':
         prior_distribution, prior_means, prior_stds = get_priors(priors_folder)
     elif prior_distribution == 'uniform':
         # need to give prior_means (the same applies to prior_stds) as a numpy array with K columns (the number of
@@ -90,7 +89,8 @@ def generate_images(
                                      output_shape=output_shape,
                                      n_channels=2,
                                      use_specific_stats_for_channel=True,
-                                     downsample=downsample)
+                                     downsample=downsample,
+                                     flipping=False)
 
     result_dir_exists = os.path.isdir(result_dir)
     if not result_dir_exists:
