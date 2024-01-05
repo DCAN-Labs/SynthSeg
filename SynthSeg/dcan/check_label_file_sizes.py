@@ -18,6 +18,8 @@ def main(base_dir) -> int:
     sorted_d = dict(sorted(size_to_count.items(), key=operator.itemgetter(1), reverse=True))
     for key, value in sorted_d.items():
         print(f'{key}: {value}')
+        if value == 1:
+            print(key)
     return 0
 
 
