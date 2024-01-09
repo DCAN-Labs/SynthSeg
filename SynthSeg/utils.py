@@ -131,6 +131,10 @@ def save_volume(volume, aff, header, path, res=None, dtype=None, n_dims=3):
                 n_dims, _ = get_dims(volume.shape)
             res = reformat_to_list(res, length=n_dims, dtype=None)
             nifty.header.set_zooms(res)
+        dir = os.path.dirname(path)
+        exists = os.path.exists(dir)
+        if not exists:
+            os.makedirs(dir)
         nib.save(nifty, path)
 
 
