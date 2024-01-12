@@ -104,4 +104,4 @@ SynthSeg/predict_*
 /SynthSeg/dcan/img_processing/chirality_correction/slurm-12030306.out
 /data/labels_classes_priors/dcan/uniform/min_max_dict.json
 /data/labels_classes_priors/dcan/normal/
-/data/labels_classes_priors/dcan/normal/
+/data/labels_classes_priors/dcan/uniform/540_549/

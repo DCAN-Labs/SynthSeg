@@ -7,8 +7,8 @@ import nibabel as nib
 import numpy as np
 
 
-def estimate_intensities_by_age():
-    estimation_labels_file = '/home/miran045/reine097/projects/SynthSeg/data/labels_classes_priors/dcan/labels.txt'
+def estimate_intensities_by_age(task_dir, output_file):
+    estimation_labels_file = './data/labels_classes_priors/dcan/labels.txt'
     file1 = open(estimation_labels_file, 'r')
     lines = file1.readlines()
     labels = []
@@ -23,12 +23,10 @@ def estimate_intensities_by_age():
     mins_and_maxes_column_major = np.tile(a, [9, len(labels), 1])
     mins_and_maxes = np.transpose(mins_and_maxes_column_major, (0, 2, 1))
 
-    task_dir = \
-        '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task552_uniform_distribution_synthseg'
-    labels_dir = os.path.join(task_dir, 'labels')
-    images_dir = os.path.join(task_dir, 'images')
+    labels_dir = os.path.join(task_dir, 'labelsTr')
+    images_dir = os.path.join(task_dir, 'imagesTr')
     label_files = [f for f in listdir(labels_dir) if isfile(join(labels_dir, f))]
-    for label_file_index in tqdm(range(len(label_files))):
+    for label_file_index in tqdm(range(len(label_files)), desc="file loop", position=1, leave=False):
         label_file = label_files[label_file_index]
         label_img = nib.load(join(labels_dir, label_file))
         label_data = label_img.get_fdata()
@@ -62,10 +60,13 @@ def estimate_intensities_by_age():
                         row = contrast * 2 + 1
                         if voxel > mins_and_maxes[age][row][label_index]:
                             mins_and_maxes[age][row][label_index] = voxel
-    with open('./data/labels_classes_priors/dcan/uniform/mins_maxes.npy', 'wb') as f:
+    with open(output_file, 'wb') as f:
         # noinspection PyTypeChecker
         np.save(f, mins_and_maxes)
 
 
 if __name__ == "__main__":
-    estimate_intensities_by_age()
+    task_folder = \
+        '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task552_uniform_distribution_synthseg'
+    output_fl = './data/labels_classes_priors/dcan/uniform/mins_maxes.npy'
+    estimate_intensities_by_age(task_folder, output_fl)
