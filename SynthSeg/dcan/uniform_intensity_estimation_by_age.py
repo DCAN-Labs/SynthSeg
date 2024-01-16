@@ -1,3 +1,4 @@
+import argparse
 import os.path
 from os import listdir
 from os.path import isfile, join
@@ -8,6 +9,12 @@ import numpy as np
 
 
 def estimate_intensities_by_age(task_dir, output_file):
+    """
+    Computes SynthSeg uniform priors for ages 0 through 9 (months).
+    @param task_dir: The nnU-Net task folder from which to read the priors.
+    @param output_file: Priors for ages 0 through 9 are all stored in this file.
+    @return: None
+    """
     estimation_labels_file = './data/labels_classes_priors/dcan/labels.txt'
     file1 = open(estimation_labels_file, 'r')
     lines = file1.readlines()
@@ -66,6 +73,11 @@ def estimate_intensities_by_age(task_dir, output_file):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog='uniform_intensity_by_age',
+        description='Computes SynthSeg uniform priors for ages 0 through 9.',
+        epilog='Please contact reine097 for questions or problems.')
+    # TODO Generalize by command-line args.
     task_folder = \
         '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task552_uniform_distribution_synthseg'
     output_fl = './data/labels_classes_priors/dcan/uniform/mins_maxes.npy'
