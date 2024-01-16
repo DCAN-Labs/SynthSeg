@@ -1,16 +1,18 @@
 import sys
-from os import listdir
-from os.path import isfile, join
 
-from SynthSeg.dcan.image_generation import generate_images
+from SynthSeg.dcan.image_generation import generate_normal_images, generate_uniform_images
 
 
-def generate_images_from_folder(input_folder, output_folder, priors_folder, image_count, downsample, age_in_months,
-                                prior_distribution='uniform', prior_means=None, prior_stds=None):
-    generate_images(input_folder, priors_folder, output_folder, image_count, downsample, age_in_months,
-                                prior_distribution, prior_means, prior_stds)
+def generate_normal_images_from_folder(input_folder, output_folder, priors_folder, image_count, downsample,
+                                       age_in_months):
+    generate_normal_images(input_folder, priors_folder, output_folder, image_count, downsample, age_in_months)
+
+
+def generate_uniforma_images_from_folder(input_folder, output_folder, min_max_file, image_count, downsample,
+                                         age_in_months):
+    generate_uniform_images(input_folder,  min_max_file, output_folder, image_count, downsample, age_in_months)
 
 
 if __name__ == "__main__":
-    generate_images_from_folder(
+    generate_normal_images_from_folder(
         sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]), sys.argv[5] == 'True', int(sys.argv[6]))
