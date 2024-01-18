@@ -12,7 +12,7 @@ if __name__ == "__main__":
         epilog='Please contact reine097 for questions or problems.')
     parser.parse_args()
 
-    for i in tqdm(range(10), desc="age loop", position=0):
+    for i in tqdm(range(10), desc="fold loop", position=0):
         task_dir = \
             f'/scratch.global/lundq163/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task{str(540 + i)}_T1_T2_Fold{i}/'
         output_file = f'./data/labels_classes_priors/dcan/uniform/mins_maxes_fold_{i}.npy'
