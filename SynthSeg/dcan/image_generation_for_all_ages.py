@@ -23,7 +23,7 @@ def generate_uniform_images_for_all_ages(input_dir, priors_file, output_folder, 
         downsample = False
 
         generate_uniforma_images_from_folder(
-            input_labels_folder, output_folder, priors_file, image_count, downsample, age)
+            input_labels_folder, output_folder, priors_file, image_count, downsample, age, tqdm_leave=False)
 
 
 if __name__ == "__main__":

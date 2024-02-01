@@ -9,8 +9,9 @@ def generate_normal_images_from_folder(input_folder, output_folder, priors_folde
 
 
 def generate_uniforma_images_from_folder(input_folder, output_folder, min_max_file, image_count, downsample,
-                                         age_in_months):
-    generate_uniform_images(input_folder,  min_max_file, output_folder, image_count, downsample, age_in_months)
+                                         age_in_months, tqdm_leave=True):
+    generate_uniform_images(
+        input_folder,  min_max_file, output_folder, image_count, downsample, age_in_months, tqdm_leave=tqdm_leave)
 
 
 if __name__ == "__main__":
