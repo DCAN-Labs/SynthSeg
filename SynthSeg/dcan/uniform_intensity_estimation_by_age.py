@@ -8,9 +8,16 @@ import nibabel as nib
 import numpy as np
 
 
-def estimate_intensities_by_age(task_dir, output_file):
+def estimate_intensities_by_age(task_dir, output_file, tqdm_position=1, tqdm_leave=False):
     """
     Computes SynthSeg uniform priors for ages 0 through 9 (months).
+    @param tqdm_leave:   : bool, optional
+            For tqdm, if [default: True], keeps all traces of the progressbar
+            upon termination of iteration.
+    @param tqdm_position:   : int, optional
+            For tqdm, pecify the line offset to print this bar (starting from 0)
+            Automatic if unspecified.
+            Useful to manage multiple bars at once (eg, from threads).
     @param task_dir: The nnU-Net task folder from which to read the priors.
     @param output_file: Priors for ages 0 through 9 are all stored in this file.
     @return: None
@@ -33,7 +40,7 @@ def estimate_intensities_by_age(task_dir, output_file):
     labels_dir = os.path.join(task_dir, 'labelsTr')
     images_dir = os.path.join(task_dir, 'imagesTr')
     label_files = [f for f in listdir(labels_dir) if isfile(join(labels_dir, f))]
-    for label_file_index in tqdm(range(len(label_files)), desc="file loop", position=1, leave=False):
+    for label_file_index in tqdm(range(len(label_files)), desc="file loop", position=tqdm_position, leave=tqdm_leave):
         label_file = label_files[label_file_index]
         label_img = nib.load(join(labels_dir, label_file))
         label_data = label_img.get_fdata()
@@ -77,8 +84,7 @@ if __name__ == "__main__":
         prog='uniform_intensity_by_age',
         description='Computes SynthSeg uniform priors for ages 0 through 9.',
         epilog='Please contact reine097 for questions or problems.')
-    # TODO Generalize by command-line args.
-    task_folder = \
-        '/home/feczk001/shared/data/nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task552_uniform_distribution_synthseg'
-    output_fl = './data/labels_classes_priors/dcan/uniform/mins_maxes.npy'
-    estimate_intensities_by_age(task_folder, output_fl)
+    parser.add_argument('task_folder')
+    parser.add_argument('output_fl')
+    args = parser.parse_args()
+    estimate_intensities_by_age(args.task_folder, args.output_fl, tqdm_position=0, tqdm_leave=True)

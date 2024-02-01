@@ -105,3 +105,5 @@ SynthSeg/predict_*
 /data/labels_classes_priors/dcan/uniform/min_max_dict.json
 /data/labels_classes_priors/dcan/normal/
 /data/labels_classes_priors/dcan/uniform/540_549/
+/data/labels_classes_priors/dcan/uniform/Task526/mins_maxes.npy
+/data/labels_classes_priors/dcan/uniform/700_709/
