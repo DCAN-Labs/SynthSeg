@@ -107,3 +107,5 @@ SynthSeg/predict_*
 /data/labels_classes_priors/dcan/uniform/540_549/
 /data/labels_classes_priors/dcan/uniform/Task526/mins_maxes.npy
 /data/labels_classes_priors/dcan/uniform/700_709/
+/SynthSeg/dcan/paper/task/write_messages.py
+/templates/message.txt

@@ -1,7 +1,7 @@
 Task {{ task }}
 ========
 
-{{ month }}-month olds
+{{ age_group }}-month olds
 ------------
 
 {{ comment }}
