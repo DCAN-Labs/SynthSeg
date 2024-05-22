@@ -1,4 +1,5 @@
 # Author: Paul Reiners
+import argparse
 import os
 import sys
 import numpy as np
@@ -60,9 +61,17 @@ def get_label_list(labels_file_pth):
 
 
 if __name__ == "__main__":
-    gt_folder = sys.argv[1]
-    inferred_dir = sys.argv[2]
-    results_folder = sys.argv[3]
+    parser = argparse.ArgumentParser(
+        prog='EvaluateResults',
+        description='Creates plots of DICE coefficients and other stats.',
+        epilog='Please contact reine097 for questions or problems in running this program.')
+    parser.add_argument('gt_folder', help="Folder containing ground truth segmentations.")
+    parser.add_argument('inferred_dir', help="Folder containing segmentation predictions made by model.")
+    parser.add_argument('results_folder', help="Presumably empty folder where results will be written to.")
+    args = parser.parse_args()
+    gt_folder = args.gt_folder
+    inferred_dir = args.inferred_dir
+    results_folder = args.results_folder
     label_list_path = os.path.join('../../../data/labels_classes_priors/dcan', 'Freesurfer_LUT_DCAN.txt')
     label_lst = get_label_list(label_list_path)
     evaluate_results(gt_folder, inferred_dir, label_lst, results_folder)
