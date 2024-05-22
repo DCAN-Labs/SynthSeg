@@ -6,7 +6,8 @@ Task {{ task }}
 
 {{ comment }}
 ```
-iou_median: {{ iou_median }}
+subject_count:     {{ count }}
+iou_median:        {{ iou_median }}
 dice_score_median: {{ dice_score_median }}
 ```
 ---

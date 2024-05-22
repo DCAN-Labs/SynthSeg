@@ -9,6 +9,7 @@ from SynthSeg.dcan.look_up_tables import get_id_to_region_mapping
 from SynthSeg.dcan.paper.create_plots import create_cat_plots
 from SynthSeg.dcan.paper.get_all_dcan_labels import get_all_dcan_labels
 from SynthSeg.evaluate import evaluation
+import shutil
 
 
 def generate_metrics_csv_files(results_dir, measures, mapping_file_name):
@@ -60,10 +61,14 @@ def get_label_list(labels_file_pth):
     return label_list
 
 
+def clean_up(results_folder):
+    shutil.rmtree(os.path.join(results_folder))
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        prog='EvaluateResults',
-        description='Creates plots of DICE coefficients and other stats.',
+        prog='CreateOnlyCatPlots',
+        description='Creates catplots of DICE coefficients and other stats.',
         epilog='Please contact reine097 for questions or problems in running this program.')
     parser.add_argument('gt_folder', help="Folder containing ground truth segmentations.")
     parser.add_argument('inferred_dir', help="Folder containing segmentation predictions made by model.")
@@ -79,3 +84,6 @@ if __name__ == "__main__":
     mapping_file = '../../../data/labels_classes_priors/dcan/Freesurfer_LUT_DCAN.txt'
     generate_metrics_csv_files(results_folder, metrics, label_list_path)
     create_cat_plots(results_folder, metrics)
+    for metric in metrics:
+        folder_to_delete = os.path.join(results_folder, metric)
+        clean_up(folder_to_delete)
