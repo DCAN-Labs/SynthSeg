@@ -1,7 +1,8 @@
 # Author: Paul Reiners
 import argparse
 import os
-import sys
+import shutil
+
 import numpy as np
 import pandas as pd
 
@@ -9,7 +10,6 @@ from SynthSeg.dcan.look_up_tables import get_id_to_region_mapping
 from SynthSeg.dcan.paper.create_plots import create_cat_plots
 from SynthSeg.dcan.paper.get_all_dcan_labels import get_all_dcan_labels
 from SynthSeg.evaluate import evaluation
-import shutil
 
 
 def generate_metrics_csv_files(results_dir, measures, mapping_file_name):
@@ -65,6 +65,18 @@ def clean_up(results_folder):
     shutil.rmtree(os.path.join(results_folder))
 
 
+def create_all_cat_plots(gt_folder, inferred_dir, results_folder):
+    label_list_path = os.path.join('./data/labels_classes_priors/dcan', 'Freesurfer_LUT_DCAN.txt')
+    label_lst = get_label_list(label_list_path)
+    evaluate_results(gt_folder, inferred_dir, label_lst, results_folder)
+    metrics = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
+    generate_metrics_csv_files(results_folder, metrics, label_list_path)
+    create_cat_plots(results_folder, metrics)
+    for metric in metrics:
+        folder_to_delete = os.path.join(results_folder, metric)
+        clean_up(folder_to_delete)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog='CreateOnlyCatPlots',
@@ -77,13 +89,4 @@ if __name__ == "__main__":
     gt_folder = args.gt_folder
     inferred_dir = args.inferred_dir
     results_folder = args.results_folder
-    label_list_path = os.path.join('../../../data/labels_classes_priors/dcan', 'Freesurfer_LUT_DCAN.txt')
-    label_lst = get_label_list(label_list_path)
-    evaluate_results(gt_folder, inferred_dir, label_lst, results_folder)
-    metrics = ['dice', 'hausdorff', 'hausdorff_95', 'hausdorff_99', 'mean_distance']
-    mapping_file = '../../../data/labels_classes_priors/dcan/Freesurfer_LUT_DCAN.txt'
-    generate_metrics_csv_files(results_folder, metrics, label_list_path)
-    create_cat_plots(results_folder, metrics)
-    for metric in metrics:
-        folder_to_delete = os.path.join(results_folder, metric)
-        clean_up(folder_to_delete)
+    create_all_cat_plots(gt_folder, inferred_dir, results_folder)
