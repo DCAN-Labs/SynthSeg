@@ -1,5 +1,5 @@
+import argparse
 import os
-import sys
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -40,8 +40,17 @@ def main(ground_truth_folder, predictions_folder, task, task_comment):
 
 
 if __name__ == '__main__':
-    ground_truth_folder = sys.argv[1]
-    predictions_folder = sys.argv[2]
-    task = int(sys.argv[3])
-    task_comment = sys.argv[4]
+    parser = argparse.ArgumentParser(
+        prog='WriteMonthMarkdown',
+        description='Creates markdown files for reports by age group.',
+        epilog='Contact reine097 if you have questions or run into problems.')
+    parser.add_argument('ground_truth_folder', help='Folder containing ground truth segmentations')
+    parser.add_argument('predictions_folder', help='Folder containing inferred segmentations')
+    parser.add_argument('task', help="Task number")
+    parser.add_argument('task_comment', help="Explanatory text for task")
+    args = parser.parse_args()
+    ground_truth_folder = args.ground_truth_folder
+    predictions_folder = args.predictions_folder
+    task = int(args.task)
+    task_comment = args.task_comment
     main(ground_truth_folder, predictions_folder, task, task_comment)
