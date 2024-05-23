@@ -1,31 +1,26 @@
 import os
-import random
 import sys
+from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
-from pathlib import Path
 
 from dcan.paper.iou_dice_score import get_medians
 
-def main(ground_truth_folder, predictions_folder):
-    task = 527
 
+def main(ground_truth_folder, predictions_folder, task, task_comment):
     def get_iou_median(age_group):
         return get_medians(ground_truth_folder, predictions_folder, month=age_group)['iou_median']
-
 
     def get_dice_score_median(age_group):
         return get_medians(ground_truth_folder, predictions_folder, month=age_group)['dice_score_median']
 
-
     def get_count(age_group):
         return get_medians(ground_truth_folder, predictions_folder, month=age_group)['count']
-
 
     age_groups = \
         [{"age_group": age_group, "count": get_count(age_group), "iou_median": get_iou_median(age_group),
           "dice_score_median": get_dice_score_median(age_group),
-          'comment': '527 was trained with T1/T2 image pairs', 'task': 527}
+          'comment': task_comment, 'task': task}
          for age_group in range(9)]
 
     environment = Environment(loader=FileSystemLoader("templates/"))
@@ -43,7 +38,10 @@ def main(ground_truth_folder, predictions_folder):
             report.write(content)
             print(f"... wrote {filename}")
 
+
 if __name__ == '__main__':
     ground_truth_folder = sys.argv[1]
     predictions_folder = sys.argv[2]
-    main(ground_truth_folder, predictions_folder)
+    task = int(sys.argv[3])
+    task_comment = sys.argv[4]
+    main(ground_truth_folder, predictions_folder, task, task_comment)
