@@ -80,7 +80,7 @@ def process_image(label_img, label_data, t1_data, t2_data, labels, mins_and_maxe
                     label_index = labels.index(label)
                     age = int(label_file[0])
 
-                    if t1_data is not None:
+                    if t1_data is not None and t2_data is not None:
                         for contrast in range(2):
                             if contrast == 0:
                                 voxel = int(t1_data[i][j][k])
@@ -96,6 +96,18 @@ def process_image(label_img, label_data, t1_data, t2_data, labels, mins_and_maxe
                             row = contrast * 2 + 1
                             if voxel > mins_and_maxes[age][row][label_index]:
                                 mins_and_maxes[age][row][label_index] = voxel
+                    elif t1_data is not None:
+                        voxel = int(t1_data[i][j][k])
+                        if voxel < 0:
+                            voxel = 0
+                        elif voxel > 255:
+                            voxel = 255
+                        row = 2
+                        if voxel < mins_and_maxes[age][row][label_index]:
+                            mins_and_maxes[age][row][label_index] = voxel
+                        row += 1
+                        if voxel > mins_and_maxes[age][row][label_index]:
+                            mins_and_maxes[age][row][label_index] = voxel
                     else:
                         voxel = int(t2_data[i][j][k])
                         if voxel < 0:
