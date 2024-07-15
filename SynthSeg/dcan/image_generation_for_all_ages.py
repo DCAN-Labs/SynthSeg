@@ -6,7 +6,7 @@ from tqdm import tqdm
 from dcan.image_generation_from_folder import generate_normal_images_from_folder, generate_uniforma_images_from_folder
 
 
-def generate_normal_images_for_all_ages(input_dir, output_folder, image_count, min_age_in_months=0):
+def generate_normal_images_for_all_ages(input_dir, output_folder, image_count, modalities, min_age_in_months=0):
     for age in tqdm(range(min_age_in_months, 9)):
         month_str = f'{age}mo'
         input_labels_folder = os.path.join(input_dir, 'labelsTr')
@@ -14,16 +14,16 @@ def generate_normal_images_for_all_ages(input_dir, output_folder, image_count, m
         downsample = False
 
         generate_normal_images_from_folder(
-            input_labels_folder, output_folder, priors_folder, image_count, downsample, age)
+            input_labels_folder, output_folder, priors_folder, image_count, downsample, age, modalities)
 
 
-def generate_uniform_images_for_all_ages(input_dir, priors_file, output_folder, image_count, min_age_in_months=0):
+def generate_uniform_images_for_all_ages(input_dir, priors_file, output_folder, image_count, min_age_in_months=0, modalities="t1t2"):
     for age in tqdm(range(min_age_in_months, 9)):
         input_labels_folder = os.path.join(input_dir, 'labelsTr')
         downsample = False
 
         generate_uniforma_images_from_folder(
-            input_labels_folder, output_folder, priors_file, image_count, downsample, age, tqdm_leave=False)
+            input_labels_folder, output_folder, priors_file, image_count, downsample, age, modalities, tqdm_leave=False)
 
 
 if __name__ == "__main__":
@@ -36,14 +36,18 @@ if __name__ == "__main__":
     parser.add_argument('min_max_file', metavar='min-mask-file')
     parser.add_argument(
         'number_generated_images_per_age_group', metavar='number-generated-images-per-age-group', type=int)
+    parser.add_argument('--modalities', default='t1t2',
+                        help='which modalities to generate (default: t1t2)', choices=['t1', 't2', 't1t2'])
     parser.add_argument('--starting-age-in-months', default=0, type=int)
     parser.add_argument('--distribution', default='normal',
                         help='distribution of priors (default: normal)', choices=['normal', 'uniform'])
     args = parser.parse_args()
+    
     inpt_dr = args.input_dir
     output_dir = args.output_dir
     n = args.number_generated_images_per_age_group
     starting_age_in_months = args.starting_age_in_months
     distribution = args.distribution
     min_max_file = args.min_max_file
-    generate_uniform_images_for_all_ages(inpt_dr, min_max_file, output_dir, n, starting_age_in_months)
+    modalities = args.modalities
+    generate_uniform_images_for_all_ages(inpt_dr, min_max_file, output_dir, n, starting_age_in_months, modalities)
