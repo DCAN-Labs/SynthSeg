@@ -38,7 +38,7 @@ def get_contrast_min_max(month_data, contrast):
 
 
 def generate_normal_images(
-        path_label_map, priors_folder, result_dir, n_examples, downsample, age_in_months):
+        path_label_map, priors_folder, result_dir, n_examples, downsample, age_in_months, modalities):
     """This program generates synthetic T1-weighted or T2-weighted brain MRI scans from a label map.  Specifically, it
     allows you to impose prior distributions on the GMM parameters, so that you can can generate images of desired
     intensity distribution.  You can generate images of desired contrast by imposing specified prior distributions from
@@ -78,10 +78,10 @@ def generate_normal_images(
                                      use_specific_stats_for_channel=True,
                                      downsample=downsample)
 
-    generate_images(age_in_months, brain_generator, n_examples, result_dir)
+    generate_images(age_in_months, brain_generator, n_examples, result_dir, modalities)
 
 
-def generate_images(age_in_months, brain_generator, n_examples, result_dir, tqdm_leave=True):
+def generate_images(age_in_months, brain_generator, n_examples, result_dir, modalities, tqdm_leave=True):
     result_dir_exists = os.path.isdir(result_dir)
     if not result_dir_exists:
         os.makedirs(result_dir)
@@ -92,21 +92,32 @@ def generate_images(age_in_months, brain_generator, n_examples, result_dir, tqdm
             continue
         # generate new image and corresponding labels
         im, lab = brain_generator.generate_brain()
-        t1_im = im[:, :, :, 0]
-        t2_im = im[:, :, :, 1]
+        if modalities == 't1' or modalities == 't1t2':
+            t1_im = im[:, :, :, 0]
+        if modalities == 't2' or modalities == 't1t2':
+            t2_im = im[:, :, :, 1]
 
-        utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
-                          os.path.join(
-                              result_dir, 'images', '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0000')))
-        utils.save_volume(t2_im, brain_generator.aff, brain_generator.header,
-                          os.path.join(
-                              result_dir, 'images', '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0001')))
+        # Labels t1 images 0000 if being used
+        if modalities == 't1' or modalities == 't1t2':
+            utils.save_volume(t1_im, brain_generator.aff, brain_generator.header,
+                            os.path.join(
+                                result_dir, 'images', '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0000')))
+        # Labels t2 images 0000 if only using t2
+        if modalities == 't2':
+            utils.save_volume(t2_im, brain_generator.aff, brain_generator.header,
+                            os.path.join(
+                                result_dir, 'images', '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0000')))
+        # Labels t2 images 0001 if doing both modalities
+        if modalities == 't1t2':
+            utils.save_volume(t2_im, brain_generator.aff, brain_generator.header,
+                            os.path.join(
+                                result_dir, 'images', '%dmo_%s_%s.nii.gz' % (age_in_months, output_file_name, '0001')))
         utils.save_volume(lab, brain_generator.aff, brain_generator.header,
                           label_file_path)
 
 
 def generate_uniform_images(
-        path_label_map, max_min_file, result_dir, n_examples, downsample, age_in_months, tqdm_leave=True):
+        path_label_map, max_min_file, result_dir, n_examples, downsample, age_in_months, modalities, tqdm_leave=True):
     """This program generates synthetic T1-weighted or T2-weighted brain MRI scans from a label map.  Specifically, it
     allows you to impose prior distributions on the GMM parameters, so that you can can generate images of desired
     intensity distribution.  You can generate images of desired contrast by imposing specified prior distributions from
@@ -154,4 +165,4 @@ def generate_uniform_images(
                                      use_specific_stats_for_channel=True,
                                      downsample=downsample)
 
-    generate_images(age_in_months, brain_generator, n_examples, result_dir, tqdm_leave=tqdm_leave)
+    generate_images(age_in_months, brain_generator, n_examples, result_dir, modalities, tqdm_leave=tqdm_leave)
