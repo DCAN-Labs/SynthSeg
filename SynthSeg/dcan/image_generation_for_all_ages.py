@@ -46,4 +46,5 @@ if __name__ == "__main__":
     starting_age_in_months = args.starting_age_in_months
     distribution = args.distribution
     min_max_file = args.min_max_file
+    print("flipping currently set to False")
     generate_uniform_images_for_all_ages(inpt_dr, min_max_file, output_dir, n, starting_age_in_months)
