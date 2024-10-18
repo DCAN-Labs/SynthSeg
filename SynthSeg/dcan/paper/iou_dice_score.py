@@ -78,4 +78,4 @@ if __name__ == "__main__":
     print()
     medians = get_medians(ground_truth_folder, predictions_folder)
     print(f'iou_median: {medians["iou_median"]}')
-    print(f'dice_score_median: {medians["dice_score_median}"]}')
+    print(f'dice_score_median: {medians["dice_score_median"]}')

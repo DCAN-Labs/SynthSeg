@@ -3,7 +3,7 @@ import os.path
 
 from tqdm import tqdm
 
-from dcan.image_generation_from_folder import generate_normal_images_from_folder, generate_uniforma_images_from_folder
+from SynthSeg.dcan.image_generation_from_folder import generate_normal_images_from_folder, generate_uniforma_images_from_folder
 
 
 def generate_normal_images_for_all_ages(input_dir, output_folder, image_count, modalities, min_age_in_months=0):

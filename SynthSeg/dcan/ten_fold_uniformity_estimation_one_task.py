@@ -3,7 +3,7 @@ import os
 
 from tqdm import tqdm
 
-from dcan.uniform_intensity_estimation_by_age import estimate_intensities_by_age
+from SynthSeg.dcan.uniform_intensity_estimation_by_age import estimate_intensities_by_age
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
