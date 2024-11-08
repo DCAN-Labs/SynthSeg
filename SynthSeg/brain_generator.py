@@ -28,7 +28,7 @@ class BrainGenerator:
                  prior_stds=None,
                  use_specific_stats_for_channel=False,
                  mix_prior_and_random=False,
-                 flipping=True,
+                 flipping=False,
                  scaling_bounds=.15,
                  rotation_bounds=15,
                  shearing_bounds=.012,
