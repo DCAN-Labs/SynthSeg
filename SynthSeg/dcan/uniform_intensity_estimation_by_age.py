@@ -29,18 +29,34 @@ def estimate_intensities_by_age(task_dir, output_file, tqdm_position=1, tqdm_lea
     for line in lines:
         label = int(line.strip())
         labels.append(label)
+        
+    labels_dir = os.path.join(task_dir, 'labelsTr')
+    label_files = [f for f in listdir(labels_dir) if isfile(join(labels_dir, f))]
+    
+    ages = []
+    age_to_index = {}
+    for file_name in label_files:
+        age_str = ''
+        for char in file_name:
+            if char.isdigit():
+                age_str += char
+            else:
+                break
+        if age_str:
+            age = int(age_str)
+            if age not in age_to_index:
+                age_to_index[age] = len(ages)
+                ages.append(age)
 
     # need to give prior_means (the same applies to prior_stds) as a numpy array with K columns (the number of labels)
     # and 4 rows. The first two rows correspond to the [min, max] of the T1 contrast, and the 3rd and 4th rows
     # correspond to [min, max] of the T2 contrast.
     a = np.array([255, 0, 255, 0])
-    mins_and_maxes_column_major = np.tile(a, [9, len(labels), 1])
+    mins_and_maxes_column_major = np.tile(a, [len(ages), len(labels), 1])
     mins_and_maxes = np.transpose(mins_and_maxes_column_major, (0, 2, 1))
 
-    labels_dir = os.path.join(task_dir, 'labelsTr')
     images_dir = os.path.join(task_dir, 'imagesTr')
-    label_files = [f for f in listdir(labels_dir) if isfile(join(labels_dir, f))]
-
+    
     for label_file_index in tqdm(range(len(label_files)), desc="file loop", position=tqdm_position, leave=tqdm_leave):
         label_file = label_files[label_file_index]
         label_img = nib.load(join(labels_dir, label_file))
@@ -65,20 +81,30 @@ def estimate_intensities_by_age(task_dir, output_file, tqdm_position=1, tqdm_lea
         if t1_data is None and t2_data is None:
             print(f"Neither T1 or T2 image found for {label_file}")
         else:
-            process_image(label_img, label_data, t1_data, t2_data, labels, mins_and_maxes, label_file)
+            age_str = ''
+            for char in label_file:
+                if char.isdigit():
+                    age_str += char
+                else:
+                    break
+            age = int(age_str)
+            age_index = age_to_index[age]
+            process_image(label_img, label_data, t1_data, t2_data, labels, mins_and_maxes, age_index)
     
+    #with open(output_file, 'wb') as f:
+    #    # noinspection PyTypeChecker
+    #    np.save(f, mins_and_maxes)
+    age_data_dict = {age: mins_and_maxes[idx] for age, idx in age_to_index.items()}
     with open(output_file, 'wb') as f:
-        # noinspection PyTypeChecker
-        np.save(f, mins_and_maxes)
+        np.save(f, age_data_dict)
     
-def process_image(label_img, label_data, t1_data, t2_data, labels, mins_and_maxes, label_file):
+def process_image(label_img, label_data, t1_data, t2_data, labels, mins_and_maxes, age_index):
         data_shape = label_img.header.get_data_shape()
         for i in range(data_shape[0]):
             for j in range(data_shape[1]):                                                                                                    
                 for k in range(data_shape[2]):
                     label = int(label_data[i][j][k])
                     label_index = labels.index(label)
-                    age = int(label_file[0])
 
                     if t1_data is not None and t2_data is not None:
                         for contrast in range(2):
@@ -91,11 +117,11 @@ def process_image(label_img, label_data, t1_data, t2_data, labels, mins_and_maxe
                             elif voxel > 255:
                                 voxel = 255
                             row = contrast * 2
-                            if voxel < mins_and_maxes[age][row][label_index]:
-                                mins_and_maxes[age][row][label_index] = voxel
+                            if voxel < mins_and_maxes[age_index][row][label_index]:
+                                mins_and_maxes[age_index][row][label_index] = voxel
                             row = contrast * 2 + 1
-                            if voxel > mins_and_maxes[age][row][label_index]:
-                                mins_and_maxes[age][row][label_index] = voxel
+                            if voxel > mins_and_maxes[age_index][row][label_index]:
+                                mins_and_maxes[age_index][row][label_index] = voxel
                     elif t1_data is not None:
                         voxel = int(t1_data[i][j][k])
                         if voxel < 0:
@@ -103,11 +129,11 @@ def process_image(label_img, label_data, t1_data, t2_data, labels, mins_and_maxe
                         elif voxel > 255:
                             voxel = 255
                         row = 2
-                        if voxel < mins_and_maxes[age][row][label_index]:
-                            mins_and_maxes[age][row][label_index] = voxel
+                        if voxel < mins_and_maxes[age_index][row][label_index]:
+                            mins_and_maxes[age_index][row][label_index] = voxel
                         row += 1
-                        if voxel > mins_and_maxes[age][row][label_index]:
-                            mins_and_maxes[age][row][label_index] = voxel
+                        if voxel > mins_and_maxes[age_index][row][label_index]:
+                            mins_and_maxes[age_index][row][label_index] = voxel
                     else:
                         voxel = int(t2_data[i][j][k])
                         if voxel < 0:
@@ -115,19 +141,19 @@ def process_image(label_img, label_data, t1_data, t2_data, labels, mins_and_maxe
                         elif voxel > 255:
                             voxel = 255
                         row = 2
-                        if voxel < mins_and_maxes[age][row][label_index]:
-                            mins_and_maxes[age][row][label_index] = voxel
+                        if voxel < mins_and_maxes[age_index][row][label_index]:
+                            mins_and_maxes[age_index][row][label_index] = voxel
                         row += 1
-                        if voxel > mins_and_maxes[age][row][label_index]:
-                            mins_and_maxes[age][row][label_index] = voxel
+                        if voxel > mins_and_maxes[age_index][row][label_index]:
+                            mins_and_maxes[age_index][row][label_index] = voxel
 
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog='uniform_intensity_by_age',
-        description='Computes SynthSeg uniform priors for ages 0 through 9.',
-        epilog='Please contact reine097 for questions or problems.')
+        description='Computes SynthSeg uniform priors for all ages found in the file names.',
+        epilog='Please contact reine097 or lundq163 for questions or problems.')
     parser.add_argument('task_folder')
     parser.add_argument('output_fl')
     args = parser.parse_args()

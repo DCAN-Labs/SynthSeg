@@ -15,10 +15,16 @@ def path_leaf(path):
 
 
 def get_uniform_prior_means(max_min_file, age_in_months):
-    data = np.load(max_min_file)
-    uniform_prior_means = data[age_in_months]
-
-    return uniform_prior_means
+    data = np.load(max_min_file, allow_pickle=True).item()
+    
+    if age_in_months in data:
+        uniform_prior_means = data[age_in_months]
+        return uniform_prior_means
+    
+    #available_ages = list(age_data_dict.keys())
+    #closest_age = min(available_ages, key=lambda x: abs(x - age_in_months))
+    #print(f"Warning: Age {age_in_months} months not found in data. Using closest available age: {closest_age} months")
+    #return age_data_dict[closest_age]
 
 
 def get_contrast_min_max(month_data, contrast):
