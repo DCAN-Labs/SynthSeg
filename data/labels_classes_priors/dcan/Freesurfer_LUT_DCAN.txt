@@ -1,8 +1,13 @@
 # FSL labels required for infant pipeline:
 labels    structures
+0   Unknown                                 0   0   0   0
+1   Left-Cerebral-Exterior                  70  130 180 0
 2   Left-Cerebral-White-Matter              245 245 245 0 (**NOTE: depending on which JLF templates are used, this label may be replace by separate labels for myelinated and unmyelinated WM**)
 3   Left-Cerebral-Cortex                    205 62  78  0
 4   Left-Lateral-Ventricle                  120 18  134 0
+5   Left-Inf-Lat-Ventricle                  196 58  250 0
+6   Left-Cerebellum-Exterior                0   148 0   0
+7   Left-Cerebellum-White-Matter            220 248 164 0
 8   Left-Cerebellum-Cortex                  230 148 34  0
 10  Left-Thalamus-Proper                    0   118 14  0
 11  Left-Caudate                            122 186 220 0
@@ -16,9 +21,14 @@ labels    structures
 24  CSF                                     60  60  60  0
 26  Left-Accumbens-area                     255 165 0   0
 28  Left-VentralDC                          165 42  42  0
+30  Left-vessel                             160 32  240 0
+31  Left-choroid-plexus                     0   200 200 0
+40  Right-Cerebral-Exterior                 205 62  78  0
 41  Right-Cerebral-White-Matter             0   225 0   0 (**NOTE: depending on which JLF templates are used, this label may be replace by separate labels for myelinated and unmyelinated WM**)
 42  Right-Cerebral-Cortex                   205 62  78  0
 43  Right-Lateral-Ventricle                 120 18  134 0
+44  Right-Inf-Lat-Ventricle                 196 58  250 0
+46  Right-Cerebellum-White-Matter           220 248 164 0
 47  Right-Cerebellum-Cortex                 230 148 34  0
 49  Right-Thalamus-Proper                   0   118 14  0
 50  Right-Caudate                           122 186 220 0
@@ -28,4 +38,9 @@ labels    structures
 54  Right-Amygdala                          103 255 255 0
 58  Right-Accumbens-area                    255 165 0   0
 60  Right-VentralDC                         165 42  42  0
+62  Right-vessel                            160 32  240 0
+63  Right-choroid-plexus                    0   200 221 0
+77  WM-hypointensities                      200 70  255 0
+80  non-WM-hypointensities                  164 108 226 0
+85  Optic-Chiasm                            234 169 30  0
 172 Vermis                                  119 100 176 0
