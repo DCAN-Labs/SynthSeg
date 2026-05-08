@@ -23,8 +23,12 @@ labels    structures
 16        brain-stem
 17        left hippocampus
 18        left amygdala
+24        csf
+25        left lesion
 26        left accumbens area
 28        left ventral DC
+30        left vessel
+31        left choroid plexus
 41        right cerebral white matter
 42        right cerebral cortex
 43        right lateral ventricle
@@ -37,5 +41,11 @@ labels    structures
 52        right pallidum
 53        right hippocampus
 54        right amygdala
+57        right lesion
 58        right accumbens area
 60        right ventral DC
+62        right vessel
+63        right choroid plexus
+77        wm hypointensities
+85        optic chiasm
+172       vermis
